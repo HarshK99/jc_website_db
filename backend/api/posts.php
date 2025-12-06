@@ -14,6 +14,7 @@ try {
     // Get query parameters
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : null;
     $slug = isset($_GET['slug']) ? $_GET['slug'] : null;
+    $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
     // Base query
     $query = "
@@ -31,6 +32,9 @@ try {
     if ($slug) {
         $query .= " AND p.slug = ?";
         $params[] = $slug;
+    } elseif ($id) {
+        $query .= " AND p.id = ?";
+        $params[] = $id;
     }
 
     $query .= " ORDER BY p.publishedAt DESC";
