@@ -5,38 +5,49 @@
   },
   "posts": [
     {
-      "id": 7,
+      "id": 1,
       "title": "How Stories Build Thinking",
       "slug": "how-stories-build-thinking",
       "excerpt": "The right stories help children form deeper reasoning, empathy, and imagery.",
-      "content": "<p>Stories are not just entertainment...</p>",
+      "content": "<p>Stories are not just entertainment—they are powerful tools for cognitive development. When children engage with well-crafted narratives, they learn to think critically, understand different perspectives, and build emotional intelligence.</p><p>Research shows that regular exposure to quality children's literature can significantly improve language skills, concentration, and even academic performance. The key is choosing stories that challenge young minds while remaining age-appropriate.</p><h3>The Science Behind Story-Based Learning</h3><p>Neuroscientists have discovered that stories activate multiple areas of the brain simultaneously. This multi-modal engagement creates stronger neural connections and improves memory retention compared to traditional learning methods.</p>",
       "coverImage": "/uploads/blog/stories-thinking.jpg",
       "status": "published",
-      "publishedAt": "2025-02-04T10:00:00Z",
-      "updatedAt": "2025-02-05T08:00:00Z",
-      "author": {
-        "id": 1,
-        "name": "J&C Editorial",
-        "avatar": "/uploads/authors/jc.png"
-      },
+      "publishedAt": "2025-12-01T10:00:00Z",
+      "updatedAt": "2025-12-01T10:00:00Z",
+      "authorId": 1,
+      "authorName": "J&C Editorial",
+      "authorAvatar": "/uploads/authors/jc.png",
       "tags": ["reading", "child-development", "storytelling"]
     },
     {
-      "id": 8,
-      "title": "Why Illustrations Matter",
+      "id": 2,
+      "title": "Why Illustrations Matter in Children's Books",
       "slug": "why-illustrations-matter",
-      "excerpt": "Illustrations are literacy tools, not decoration.",
-      "content": "<p>Illustrations deepen comprehension...</p>",
+      "excerpt": "Illustrations are literacy tools, not decoration—they deepen comprehension and engagement.",
+      "content": "<p>Many people underestimate the importance of illustrations in children's books, viewing them merely as decorative elements. However, research consistently shows that quality illustrations are essential literacy tools that enhance comprehension and engagement.</p><p>Illustrations serve multiple purposes: they provide visual context for text, help children make connections between words and meanings, and support different learning styles. A well-illustrated book can be understood by children who are not yet fluent readers.</p><h3>The Role of Visual Literacy</h3><p>Visual literacy is a crucial skill in today's image-saturated world. Quality children's book illustrations teach children how to 'read' images, understand symbolism, and interpret visual narratives. This skill transfers to other areas of learning and life.</p>",
       "coverImage": "/uploads/blog/illustrations-matter.jpg",
       "status": "published",
-      "publishedAt": "2025-02-20T09:30:00Z",
-      "updatedAt": "2025-02-20T10:10:00Z",
-      "author": {
-        "id": 1,
-        "name": "J&C Editorial",
-        "avatar": "/uploads/authors/jc.png"
-      },
-      "tags": ["visual-learning", "child-development"]
+      "publishedAt": "2025-11-28T09:30:00Z",
+      "updatedAt": "2025-11-28T09:30:00Z",
+      "authorId": 1,
+      "authorName": "J&C Editorial",
+      "authorAvatar": "/uploads/authors/jc.png",
+      "tags": ["visual-learning", "child-development", "literacy"]
+    },
+    {
+      "id": 3,
+      "title": "Building Emotional Intelligence Through Literature",
+      "slug": "building-emotional-intelligence",
+      "excerpt": "Children's books that explore emotions help develop empathy and self-awareness.",
+      "content": "<p>Emotional intelligence is one of the most important skills we can teach children. Quality children's literature provides safe spaces for exploring complex emotions and social situations.</p><p>Through stories, children learn to identify, understand, and manage their own emotions while developing empathy for others. Books that tackle themes like friendship, loss, courage, and kindness provide valuable lessons that stick with children throughout their lives.</p><h3>Choosing Books for Emotional Development</h3><p>When selecting books for emotional development, look for stories that: present authentic emotions, model healthy coping strategies, show diverse perspectives, and encourage discussion about feelings.</p>",
+      "coverImage": "/uploads/blog/emotional-intelligence.jpg",
+      "status": "published",
+      "publishedAt": "2025-11-25T14:15:00Z",
+      "updatedAt": "2025-11-25T14:15:00Z",
+      "authorId": 1,
+      "authorName": "J&C Editorial",
+      "authorAvatar": "/uploads/authors/jc.png",
+      "tags": ["emotional-intelligence", "child-development", "empathy"]
     }
   ],
   "books": [

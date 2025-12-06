@@ -1,14 +1,22 @@
 <?php
-// Database configuration for XAMPP local development
-$host = 'localhost'; // Usually localhost on local development
-$dbname = 'jc_website_db'; // Database name you created in phpMyAdmin
-$username = 'root'; // Default XAMPP username
-$password = ''; // Default XAMPP password (empty)
-// Database configuration for hostinger production development
-// $host = 'localhost'; // Usually localhost on local development
-// $dbname = 'u457360812_jc_website_db'; // Database name you created in phpMyAdmin
-// $username = 'u457360812_jc';
-// $password = 'Jc@admin9'; 
+// Database configuration - Environment-aware setup
+
+// Check if we're in production (Hostinger) or development (localhost)
+$isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'hostingersite.com') !== false;
+
+if ($isProduction) {
+    // Production configuration (Hostinger)
+    $host = 'localhost';
+    $dbname = 'u457360812_jc_website_db';
+    $username = 'u457360812_jc';
+    $password = 'Jc@admin9';
+} else {
+    // Development configuration (XAMPP/localhost)
+    $host = 'localhost';
+    $dbname = 'jc_website_db';
+    $username = 'root';
+    $password = '';
+}
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);

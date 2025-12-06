@@ -20,8 +20,10 @@ export interface Post {
   status: string;
   publishedAt: string;
   updatedAt: string;
-  author: Author;
-  tags: string[];
+  authorId: number;
+  authorName?: string; // From API join
+  authorAvatar?: string; // From API join
+  tags?: string[];
 }
 
 export interface Book {
