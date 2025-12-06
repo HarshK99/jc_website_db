@@ -4,6 +4,11 @@ $host = 'localhost'; // Usually localhost on local development
 $dbname = 'jc_website_db'; // Database name you created in phpMyAdmin
 $username = 'root'; // Default XAMPP username
 $password = ''; // Default XAMPP password (empty)
+// Database configuration for hostinger production development
+// $host = 'localhost'; // Usually localhost on local development
+// $dbname = 'u457360812_jc_website_db'; // Database name you created in phpMyAdmin
+// $username = 'u457360812_jc';
+// $password = 'Jc@admin9'; 
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
