@@ -46,3 +46,23 @@ export async function fetchPosts(limit?: number): Promise<Post[]> {
     return sampleData.posts || [];
   }
 }
+
+export async function fetchPostBySlug(slug: string): Promise<Post | null> {
+  try {
+    const url = new URL(`${API_BASE_URL}/api/posts.php`);
+    url.searchParams.set('slug', slug);
+    console.log('Attempting to fetch post from:', url.toString());
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      throw new Error('Failed to fetch post');
+    }
+    const data = await response.json();
+    console.log('Fetched post from API:', data);
+    return data.length > 0 ? data[0] : null;
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    // For development, find in sample data
+    const post = sampleData.posts?.find(p => p.slug === slug);
+    return post || null;
+  }
+}

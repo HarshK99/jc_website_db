@@ -13,26 +13,41 @@ try {
 
     // Get query parameters
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : null;
+    $slug = isset($_GET['slug']) ? $_GET['slug'] : null;
 
     // Base query
     $query = "
         SELECT
-            p.*,
+            p.id, p.title, p.slug, p.excerpt, p.content, p.coverImage, p.status, p.publishedAt, p.updatedAt, p.authorId,
             a.name as authorName,
             a.avatar as authorAvatar
         FROM posts p
         LEFT JOIN authors a ON p.authorId = a.id
         WHERE p.status = 'published'
-        ORDER BY p.publishedAt DESC
     ";
 
-    if ($limit) {
+    $params = [];
+
+    if ($slug) {
+        $query .= " AND p.slug = ?";
+        $params[] = $slug;
+    }
+
+    $query .= " ORDER BY p.publishedAt DESC";
+
+    if ($limit && !$slug) {
         $query .= " LIMIT $limit";
     }
 
     $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $posts = $stmt->fetchAll();
+    $stmt->execute($params);
+    
+    if ($slug) {
+        $post = $stmt->fetch();
+        $posts = $post ? [$post] : [];
+    } else {
+        $posts = $stmt->fetchAll();
+    }
 
     // Add tags to each post
     foreach ($posts as &$post) {
