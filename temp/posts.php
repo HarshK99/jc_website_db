@@ -8,11 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 try {
+    echo "Starting posts API...\n";
     require_once '../includes/functions.php';
+    echo "Functions loaded\n";
     require_once '../config/db.php';
+    echo "Database config loaded\n";
 
     // Get query parameters
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : null;
+    echo "Limit: " . ($limit ?? 'none') . "\n";
 
     // Base query
     $query = "
@@ -30,9 +34,13 @@ try {
         $query .= " LIMIT $limit";
     }
 
+    echo "Query: $query\n";
+
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $posts = $stmt->fetchAll();
+
+    echo "Found " . count($posts) . " posts\n";
 
     // Add tags to each post
     foreach ($posts as &$post) {
@@ -43,10 +51,12 @@ try {
         $post['tags'] = $tags;
     }
 
+    echo "Tags added, returning JSON\n";
+
     // Return posts as JSON
     jsonResponse($posts);
 
 } catch (Exception $e) {
-    errorResponse('Failed to fetch posts: ' . $e->getMessage(), 500);
+    errorResponse('Failed to fetch books: ' . $e->getMessage(), 500);
 }
 ?>
