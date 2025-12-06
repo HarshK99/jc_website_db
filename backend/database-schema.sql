@@ -93,5 +93,14 @@ INSERT INTO post_tags (postId, tag) VALUES
 (2, 'visual-learning'), (2, 'child-development'), (2, 'literacy'),
 (3, 'emotional-intelligence'), (3, 'child-development'), (3, 'empathy');
 
+INSERT INTO tags (name, slug) VALUES
+('reading', 'reading'),
+('child-development', 'child-development'),
+('storytelling', 'storytelling'),
+('visual-learning', 'visual-learning'),
+('literacy', 'literacy'),
+('emotional-intelligence', 'emotional-intelligence'),
+('empathy', 'empathy');
+
 INSERT INTO admin_users (name, email, password, role) VALUES
 ('J & C Owner', 'admin@jc.com', '$2y$10$examplehashedpassword', 'owner'); -- Use password_hash() in PHP for real password
