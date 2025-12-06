@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "brand": "J & C Group",
+    "tagline": "Come to the point, go to the root"
+  },
+  "posts": [
+    {
+      "id": 7,
+      "title": "How Stories Build Thinking",
+      "slug": "how-stories-build-thinking",
+      "excerpt": "The right stories help children form deeper reasoning, empathy, and imagery.",
+      "content": "<p>Stories are not just entertainment...</p>",
+      "coverImage": "/uploads/blog/stories-thinking.jpg",
+      "status": "published",
+      "publishedAt": "2025-02-04T10:00:00Z",
+      "updatedAt": "2025-02-05T08:00:00Z",
+      "author": {
+        "id": 1,
+        "name": "J&C Editorial",
+        "avatar": "/uploads/authors/jc.png"
+      },
+      "tags": ["reading", "child-development", "storytelling"]
+    },
+    {
+      "id": 8,
+      "title": "Why Illustrations Matter",
+      "slug": "why-illustrations-matter",
+      "excerpt": "Illustrations are literacy tools, not decoration.",
+      "content": "<p>Illustrations deepen comprehension...</p>",
+      "coverImage": "/uploads/blog/illustrations-matter.jpg",
+      "status": "published",
+      "publishedAt": "2025-02-20T09:30:00Z",
+      "updatedAt": "2025-02-20T10:10:00Z",
+      "author": {
+        "id": 1,
+        "name": "J&C Editorial",
+        "avatar": "/uploads/authors/jc.png"
+      },
+      "tags": ["visual-learning", "child-development"]
+    }
+  ],
+  "books": [
+    {
+      "id": 3,
+      "title": "Under the Banyan Tree",
+      "slug": "under-the-banyan-tree",
+      "shortDescription": "A gentle, poetic journey beneath a wise old tree.",
+      "description": "<p>The banyan tree watches generations grow...</p>",
+      "ageGroup": "6–9 years",
+      "coverImage": "/uploads/books/banyan.jpg",
+      "buyLink": "https://amazon.in/banyan",
+      "publishedYear": 2024,
+      "pages": 42
+    },
+    {
+      "id": 4,
+      "title": "Clouds With Secrets",
+      "slug": "clouds-with-secrets",
+      "shortDescription": "A whimsical chase through shifting skies.",
+      "description": "<p>Clouds hold more than rain...</p>",
+      "ageGroup": "5–8 years",
+      "coverImage": "/uploads/books/clouds.jpg",
+      "buyLink": "https://amazon.in/clouds",
+      "publishedYear": 2023,
+      "pages": 38
+    }
+  ],
+  "authors": [
+    {
+      "id": 1,
+      "name": "J&C Editorial",
+      "bio": "The core editorial voice guiding every title at J & C.",
+      "avatar": "/uploads/authors/jc.png"
+    }
+  ],
+  "adminUsers": [
+    {
+      "id": 1,
+      "name": "J & C Owner",
+      "email": "admin@jc.com",
+      "role": "owner"
+    }
+  ],
+  "taxonomy": {
+    "categories": [
+      {
+        "id": 1,
+        "name": "Reading Habits",
+        "slug": "reading-habits"
+      },
+      {
+        "id": 2,
+        "name": "Behind the Stories",
+        "slug": "behind-the-stories"
+      }
+    ],
+    "tags": [
+      {
+        "id": 1,
+        "name": "storytelling",
+        "slug": "storytelling"
+      },
+      {
+        "id": 2,
+        "name": "child-development",
+        "slug": "child-development"
+      }
+    ]
+  }
+}
