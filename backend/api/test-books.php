@@ -1,5 +1,9 @@
 <?php
-header('Access-Control-Allow-Origin: *');
+require_once '../config/cors.php';
+
+// CORS headers
+header('Access-Control-Allow-Origin: ' . getCorsOrigin());
+header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 
 try {

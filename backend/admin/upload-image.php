@@ -1,6 +1,13 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+
+// Include CORS configuration
+require_once '../config/cors.php';
+
+// Set CORS headers with proper origin
+$origin = getCorsOrigin();
+header("Access-Control-Allow-Origin: $origin");
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
@@ -62,12 +69,12 @@ $filepath = $uploadDir . $filename;
 
 // Move uploaded file
 if (move_uploaded_file($file['tmp_name'], $filepath)) {
-    // Return the relative path for database storage
-    $relativePath = '/uploads/blog/' . $filename;
+    // Return the full URL for the image
+    $imageUrl = $baseUrl . '/uploads/blog/' . $filename;
     echo json_encode([
         'success' => true,
         'message' => 'Image uploaded successfully',
-        'path' => $relativePath,
+        'path' => $imageUrl,
         'filename' => $filename
     ]);
 } else {
