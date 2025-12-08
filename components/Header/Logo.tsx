@@ -6,12 +6,16 @@ interface LogoProps {
 }
 
 export default function Logo({ variant = 'light', size = 'large' }: LogoProps) {
-  const textColor = variant === 'dark' ? 'text-white' : 'text-gray-900';
-  const sizeClass = size === 'small' ? 'text-xl' : 'text-2xl';
+  const sizeClass = size === 'small' ? 'h-8' : 'h-12';
+  const filterClass = variant === 'dark' ? 'brightness-0 invert' : '';
 
   return (
-    <Link href="/" className={`${sizeClass} font-bold ${textColor} hover:opacity-80 transition-opacity`}>
-      J & C Group
+    <Link href="/" className="block">
+      <img
+        src="/logo.jpeg"
+        alt="J & C Group"
+        className={`${sizeClass} ${filterClass} transition-opacity hover:opacity-80`}
+      />
     </Link>
   );
 }
