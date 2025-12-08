@@ -64,6 +64,7 @@ export default function EditPost() {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(form),
+        credentials: 'include'
       });
 
       if (response.ok) {

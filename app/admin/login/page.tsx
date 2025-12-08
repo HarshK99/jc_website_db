@@ -20,6 +20,7 @@ export default function AdminLogin() {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ email, password }),
+        credentials: 'include'
       });
 
       const data = await response.json();

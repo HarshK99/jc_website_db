@@ -23,7 +23,9 @@ export default function AdminDashboard() {
   }, []);
 
   const checkAuth = async () => {
-    const response = await fetch('http://localhost:8080/jc_backend/admin/check-session.php');
+    const response = await fetch('http://localhost:8080/jc_backend/admin/check-session.php', {
+      credentials: 'include'
+    });
     const data = await response.json();
     if (!data.logged_in) {
       router.push('/admin/login');
