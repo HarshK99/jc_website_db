@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { fetchPosts } from '../../lib/api';
-import BlogPostCard from '../../components/BlogPostCard';
+import BlogCardHorizontal from '../../components/BlogCardHorizontal';
 import RecommendedPosts from '../../components/RecommendedPosts';
 import LatestPosts from '../../components/LatestPosts';
 import { Post } from '../../lib/types';
@@ -42,7 +42,7 @@ export default function BlogPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Our Blog
+              Our Blogs
             </h1>
           </div>
           <div className="flex justify-center">
@@ -59,7 +59,7 @@ export default function BlogPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Our Blog
+              Our Blogs
             </h1>
             <p className="text-red-600 mt-4">{error}</p>
           </div>
@@ -74,7 +74,7 @@ export default function BlogPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Our Blog
+            Our Blogs
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Insights, stories, and expert advice on children's literature,
@@ -97,7 +97,7 @@ export default function BlogPage() {
               </div>
               <div className="space-y-8">
                 {allPosts.map((post) => (
-                  <BlogPostCard key={post.id} post={post} />
+                  <BlogCardHorizontal key={post.id} post={post} />
                 ))}
               </div>
             </section>
