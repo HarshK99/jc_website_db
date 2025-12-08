@@ -133,7 +133,11 @@ export default function PostForm({ mode, postId }: PostFormProps) {
   const pageTitle = mode === 'add' ? 'Add New Post' : 'Edit Post';
   const publishButtonText = loadingType === 'published'
     ? (mode === 'add' ? 'Publishing...' : 'Updating...')
-    : (mode === 'add' ? 'Publish' : 'Update');
+    : (mode === 'add' ? 'Publish' : (form.status === 'published' ? 'Update' : 'Publish'));
+
+  // Determine which buttons to show
+  const showSaveDraftButton = mode === 'add' || (mode === 'edit' && form.status === 'draft'); // Show Save Draft for new posts and draft edits
+  const showPublishButton = true; // Always show publish/update button
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -141,14 +145,16 @@ export default function PostForm({ mode, postId }: PostFormProps) {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">{pageTitle}</h1>
           <div className="flex space-x-3">
-            <button
-              type="button"
-              onClick={() => handleSubmit('draft')}
-              disabled={loading}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50"
-            >
-              {loadingType === 'draft' ? 'Saving...' : 'Save Draft'}
-            </button>
+            {showSaveDraftButton && (
+              <button
+                type="button"
+                onClick={() => handleSubmit('draft')}
+                disabled={loading}
+                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50"
+              >
+                {loadingType === 'draft' ? 'Saving...' : 'Save Draft'}
+              </button>
+            )}
             <button
               type="button"
               onClick={() => handleSubmit('published')}
@@ -190,16 +196,24 @@ export default function PostForm({ mode, postId }: PostFormProps) {
           </div>
 
           {/* Sidebar */}
+        
           <div className="space-y-6">
-            {/* Publish/Update Panel */}
+            {/* Publish Panel - Show in both modes but with different content */}
+              {mode==='edit' && (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">{mode === 'add' ? 'Publish' : 'Update'}</h3>
-              {mode === 'add' ? (
-                <p className="text-sm text-gray-600">
-                  Posts will be published immediately when you click &quot;Publish&quot;, or saved as drafts when you click &quot;Save Draft&quot;.
-                </p>
-              ) : (
+              <h3 className="text-lg font-semibold mb-4">Status</h3>
+              
                 <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-600">Current status:</span>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      form.status === 'published'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {form.status === 'published' ? 'Published' : 'Draft'}
+                    </span>
+                  </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Publish Date</label>
                     <input
@@ -211,8 +225,10 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                     />
                   </div>
                 </div>
-              )}
+              
+              
             </div>
+              )}
 
             {/* Featured Image */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
