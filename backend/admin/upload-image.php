@@ -39,11 +39,15 @@ if (!isset($_FILES['image'])) {
 }
 
 $file = $_FILES['image'];
-$uploadDir = '../uploads/blog/';
+$uploadDir = '../../uploads/blog/';
 
 // Create upload directory if it doesn't exist
 if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0755, true);
+    if (!mkdir($uploadDir, 0755, true)) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Failed to create upload directory']);
+        exit;
+    }
 }
 
 // Validate file type
@@ -70,7 +74,7 @@ $filepath = $uploadDir . $filename;
 // Move uploaded file
 if (move_uploaded_file($file['tmp_name'], $filepath)) {
     // Return the full URL for the image
-    $imageUrl = $baseUrl . '/uploads/blog/' . $filename;
+    $imageUrl = $uploadBaseUrl . '/uploads/blog/' . $filename;
     echo json_encode([
         'success' => true,
         'message' => 'Image uploaded successfully',

@@ -7,6 +7,9 @@ $isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'h
 // Define base URL for the application
 $baseUrl = $isProduction ? 'https://yourdomain.com' : 'http://localhost:8080/jc_backend';
 
+// Define base URL for uploads (served directly from web root)
+$uploadBaseUrl = $isProduction ? 'https://yourdomain.com' : 'http://localhost:8080';
+
 if ($isProduction) {
     // Production configuration (Hostinger)
     $host = 'localhost';
