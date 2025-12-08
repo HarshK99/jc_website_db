@@ -39,7 +39,7 @@ if (!isset($_FILES['image'])) {
 }
 
 $file = $_FILES['image'];
-$uploadDir = '../../uploads/blog/';
+$uploadDir = dirname(__DIR__, 2) . '/uploads/blog/';
 
 // Create upload directory if it doesn't exist
 if (!is_dir($uploadDir)) {
@@ -73,14 +73,20 @@ $filepath = $uploadDir . $filename;
 
 // Move uploaded file
 if (move_uploaded_file($file['tmp_name'], $filepath)) {
-    // Return the full URL for the image
-    $imageUrl = $uploadBaseUrl . '/uploads/blog/' . $filename;
-    echo json_encode([
-        'success' => true,
-        'message' => 'Image uploaded successfully',
-        'path' => $imageUrl,
-        'filename' => $filename
-    ]);
+    // Verify the file was actually created
+    if (file_exists($filepath)) {
+        // Return the full URL for the image
+        $imageUrl = $uploadBaseUrl . '/uploads/blog/' . $filename;
+        echo json_encode([
+            'success' => true,
+            'message' => 'Image uploaded successfully',
+            'path' => $imageUrl,
+            'filename' => $filename
+        ]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'File upload reported success but file not found']);
+    }
 } else {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Failed to upload image']);

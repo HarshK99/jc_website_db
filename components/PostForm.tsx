@@ -85,6 +85,45 @@ export default function PostForm({ mode, postId }: PostFormProps) {
     setLoadingType(status);
 
     try {
+      let coverImage = form.coverImage;
+
+      // Upload image if selected but not yet uploaded
+      if (selectedImage && !form.coverImage) {
+        setUploadingImage(true);
+        try {
+          const formData = new FormData();
+          formData.append('image', selectedImage);
+
+          const response = await fetch(ADMIN_ENDPOINTS.uploadImage, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            coverImage = data.path;
+            setForm(prevForm => ({ ...prevForm, coverImage: data.path }));
+            setSelectedImage(null); // Clear after successful upload
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            alert(`Failed to upload image: ${errorData.message || 'Unknown error'}`);
+            setLoading(false);
+            setLoadingType(null);
+            setUploadingImage(false);
+            return;
+          }
+        } catch (err) {
+          alert('Error uploading image');
+          setLoading(false);
+          setLoadingType(null);
+          setUploadingImage(false);
+          return;
+        } finally {
+          setUploadingImage(false);
+        }
+      }
+
       let publishedAt = form.publishedAt;
 
       if (mode === 'add') {
@@ -97,6 +136,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
 
       const formData = { 
         ...form, 
+        coverImage,
         status, 
         publishedAt,
         is_recommended: form.is_recommended ? '1' : '0'
@@ -160,36 +200,6 @@ export default function PostForm({ mode, postId }: PostFormProps) {
         setImagePreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
-    }
-  };
-
-  const handleImageUpload = async () => {
-    if (!selectedImage) return;
-
-    setUploadingImage(true);
-    try {
-      const formData = new FormData();
-      formData.append('image', selectedImage);
-
-      const response = await fetch(ADMIN_ENDPOINTS.uploadImage, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include'
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setForm(prevForm => ({ ...prevForm, coverImage: data.path }));
-        setSelectedImage(null); // Clear selected file after successful upload
-        alert('Image uploaded successfully!');
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        alert(`Failed to upload image: ${errorData.message || 'Unknown error'}`);
-      }
-    } catch (err) {
-      alert('Error uploading image');
-    } finally {
-      setUploadingImage(false);
     }
   };
 
@@ -356,29 +366,6 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                     </button>
                   </div>
 
-                  {selectedImage && !form.coverImage && (
-                    <div className="flex space-x-2">
-                      <button
-                        type="button"
-                        onClick={handleImageUpload}
-                        disabled={uploadingImage}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50"
-                      >
-                        {uploadingImage ? 'Uploading...' : 'Upload Image'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedImage(null);
-                          setImagePreview(form.coverImage || '');
-                        }}
-                        className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
-
                   {form.coverImage && (
                     <p className="text-xs text-green-600">✓ Image uploaded successfully</p>
                   )}
@@ -391,7 +378,8 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <p className="text-sm text-gray-600 mb-4">Add Featured Image</p>
+                  <p className="text-sm text-gray-600 mb-4">Select Featured Image</p>
+                  <p className="text-xs text-gray-500 mb-4">The image will be uploaded automatically when you publish the post.</p>
 
                   <div className="space-y-2">
                     <input
