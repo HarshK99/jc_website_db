@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 session_start([
-    'cookie_samesite' => 'Lax',
-    'cookie_secure' => false, // Set to true in production with HTTPS
+    'cookie_samesite' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'None' : 'Lax',
+    'cookie_secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
     'cookie_httponly' => true,
 ]);
 require_once '../config/db.php';
