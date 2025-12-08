@@ -19,7 +19,6 @@ export default function AdminDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    checkAuth();
     fetchPosts();
   }, []);
 
