@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $_POST['status'];
     $publishedAt = $_POST['publishedAt'];
     $coverImage = $_POST['coverImage'] ?? '';
+    $isRecommended = isset($_POST['is_recommended']) ? 1 : 0;
 
     // Convert empty publishedAt to NULL
     $publishedAtValue = empty($publishedAt) ? null : $publishedAt;
@@ -46,13 +47,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         if ($id) {
             // Update
-            $stmt = $pdo->prepare("UPDATE posts SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=?, coverImage=? WHERE id=?");
-            $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $id]);
+            $stmt = $pdo->prepare("UPDATE posts SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=?, coverImage=?, is_recommended=? WHERE id=?");
+            $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $isRecommended, $id]);
             echo json_encode(['success' => true, 'message' => 'Post updated successfully', 'id' => $id]);
         } else {
             // Insert
-            $stmt = $pdo->prepare("INSERT INTO posts (title, slug, excerpt, content, status, publishedAt, coverImage, authorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $_SESSION['admin_id']]);
+            $stmt = $pdo->prepare("INSERT INTO posts (title, slug, excerpt, content, status, publishedAt, coverImage, authorId, is_recommended) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $_SESSION['admin_id'], $isRecommended]);
             $newId = $pdo->lastInsertId();
             echo json_encode(['success' => true, 'message' => 'Post created successfully', 'id' => $newId]);
         }

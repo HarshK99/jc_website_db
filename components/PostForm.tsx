@@ -10,6 +10,7 @@ interface PostFormData {
   status: string;
   publishedAt: string;
   coverImage: string;
+  is_recommended: boolean;
 }
 
 interface PostFormProps {
@@ -26,6 +27,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
     status: 'draft',
     publishedAt: '',
     coverImage: '',
+    is_recommended: false,
   });
   const [loading, setLoading] = useState(false);
   const [loadingType, setLoadingType] = useState<'draft' | 'published' | null>(null);
@@ -65,6 +67,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
           status: post.status,
           publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : '',
           coverImage: post.coverImage || '',
+          is_recommended: post.is_recommended || false,
         });
         // Set image preview if there's an existing image
         if (post.coverImage) {
@@ -92,7 +95,12 @@ export default function PostForm({ mode, postId }: PostFormProps) {
       }
       // For edit mode, keep the existing publishedAt
 
-      const formData = { ...form, status, publishedAt };
+      const formData = { 
+        ...form, 
+        status, 
+        publishedAt,
+        is_recommended: form.is_recommended ? '1' : '0'
+      };
       const url = mode === 'edit' && postId
         ? ADMIN_ENDPOINTS.editPost + '?id=' + postId
         : ADMIN_ENDPOINTS.editPost;
@@ -403,6 +411,26 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Tags */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-4">Tags</h3>
+              <div className="space-y-3">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="is_recommended"
+                    checked={form.is_recommended}
+                    onChange={(e) => setForm(prevForm => ({ ...prevForm, is_recommended: e.target.checked }))}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Recommended Post</span>
+                </label>
+                <p className="text-xs text-gray-500">
+                  Recommended posts appear in the featured blogs section on the home page.
+                </p>
+              </div>
             </div>
 
             {/* Excerpt */}
