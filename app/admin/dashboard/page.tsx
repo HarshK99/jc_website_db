@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ADMIN_ENDPOINTS } from '../../../lib/admin-config';
 
 interface Post {

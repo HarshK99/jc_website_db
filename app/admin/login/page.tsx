@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ADMIN_ENDPOINTS } from '../../../lib/admin-config';
 
 export default function AdminLogin() {
