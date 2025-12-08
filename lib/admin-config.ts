@@ -1,0 +1,16 @@
+// Admin API configuration
+export const ADMIN_API_BASE = process.env.NODE_ENV === 'production'
+  ? 'https://slateblue-cheetah-410739.hostingersite.com/backend'
+  : 'http://localhost:8080/jc_backend';
+
+export const ADMIN_ENDPOINTS = {
+  login: `${ADMIN_API_BASE}/admin/login.php`,
+  checkSession: `${ADMIN_API_BASE}/admin/check-session.php`,
+  editPost: `${ADMIN_API_BASE}/admin/edit-post.php`,
+  editBook: `${ADMIN_API_BASE}/admin/edit-book.php`,
+} as const;
+
+export const API_ENDPOINTS = {
+  books: `${ADMIN_API_BASE}/api/books.php`,
+  posts: `${ADMIN_API_BASE}/api/posts.php`,
+} as const;

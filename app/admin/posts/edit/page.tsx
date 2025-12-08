@@ -1,7 +1,4 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { ADMIN_ENDPOINTS } from '../../../../lib/admin-config';
 
 interface Post {
   id: number;
@@ -60,7 +57,7 @@ export default function EditPost() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/jc_backend/admin/edit-post.php?id=' + id, {
+      const response = await fetch(ADMIN_ENDPOINTS.editPost + '?id=' + id, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(form),

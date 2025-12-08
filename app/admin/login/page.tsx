@@ -1,7 +1,4 @@
-'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { ADMIN_ENDPOINTS } from '../../../lib/admin-config';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -16,7 +13,7 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8080/jc_backend/admin/login.php', {
+      const response = await fetch(ADMIN_ENDPOINTS.login, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ email, password }),

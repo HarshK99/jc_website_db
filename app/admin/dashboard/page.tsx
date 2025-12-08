@@ -1,8 +1,4 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { ADMIN_ENDPOINTS } from '../../../lib/admin-config';
 
 interface Post {
   id: number;
@@ -23,7 +19,7 @@ export default function AdminDashboard() {
   }, []);
 
   const checkAuth = async () => {
-    const response = await fetch('http://localhost:8080/jc_backend/admin/check-session.php', {
+    const response = await fetch(ADMIN_ENDPOINTS.checkSession, {
       credentials: 'include'
     });
     const data = await response.json();

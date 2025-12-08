@@ -1,7 +1,4 @@
-'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { ADMIN_ENDPOINTS } from '../../../../lib/admin-config';
 
 export default function AddPost() {
   const [form, setForm] = useState({
@@ -20,7 +17,7 @@ export default function AddPost() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/jc_backend/admin/edit-post.php', {
+      const response = await fetch(ADMIN_ENDPOINTS.editPost, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(form),
