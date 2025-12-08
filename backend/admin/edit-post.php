@@ -19,7 +19,7 @@ session_start([
 require_once '../config/db.php';
 
 if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
+    echo json_encode(['success' => false, 'message' => 'Session expired. Please login again.']);
     exit;
 }
 
@@ -43,12 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Update
         $stmt = $pdo->prepare("UPDATE posts SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=? WHERE id=?");
         $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAt, $id]);
+        echo json_encode(['success' => true, 'message' => 'Post updated successfully', 'id' => $id]);
     } else {
         // Insert
         $stmt = $pdo->prepare("INSERT INTO posts (title, slug, excerpt, content, status, publishedAt, authorId) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAt, $_SESSION['admin_id']]);
+        $newId = $pdo->lastInsertId();
+        echo json_encode(['success' => true, 'message' => 'Post created successfully', 'id' => $newId]);
     }
-    header('Location: dashboard.php');
     exit;
 }
 ?>

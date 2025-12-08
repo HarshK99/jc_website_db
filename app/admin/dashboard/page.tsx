@@ -37,9 +37,17 @@ export default function AdminDashboard() {
     try {
       const response = await fetch(API_ENDPOINTS.posts);
       const data = await response.json();
-      setPosts(data);
+      console.log('Posts API response:', data);
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setPosts(data);
+      } else {
+        console.error('Posts API did not return an array:', data);
+        setPosts([]);
+      }
     } catch (err) {
-      console.error('Failed to fetch posts');
+      console.error('Failed to fetch posts:', err);
+      setPosts([]);
     } finally {
       setLoading(false);
     }
@@ -61,7 +69,7 @@ export default function AdminDashboard() {
           </tr>
         </thead>
         <tbody>
-          {posts.map((post) => (
+          {Array.isArray(posts) && posts.map((post) => (
             <tr key={post.id}>
               <td>{post.title}</td>
               <td>{post.status}</td>
