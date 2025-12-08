@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { ADMIN_ENDPOINTS, ADMIN_API_BASE } from '../../lib/admin-config';
 
 export default function AdminLayout({
   children,
@@ -18,7 +19,7 @@ export default function AdminLayout({
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('/backend/admin/check-session.php', {
+      const response = await fetch(ADMIN_ENDPOINTS.checkSession, {
         credentials: 'include'
       });
       const data = await response.json();
@@ -32,7 +33,7 @@ export default function AdminLayout({
 
   const handleLogout = async () => {
     try {
-      await fetch('/backend/admin/logout.php', {
+      await fetch(`${ADMIN_API_BASE}/admin/logout.php`, {
         method: 'POST',
         credentials: 'include'
       });
