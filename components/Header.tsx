@@ -1,31 +1,45 @@
-import Link from 'next/link';
+'use client';
+
+import { useScrollPosition } from '../lib/hooks/useScrollPosition';
+import { useIsMobile } from '../lib/hooks/useIsMobile';
+import NavBar from './Header/NavBar';
+import Logo from './Header/Logo';
 
 export default function Header() {
+  const isScrolled = useScrollPosition(120);
+  const isMobile = useIsMobile();
+
+  const showUtilityBar = !isMobile && !isScrolled;
+
   return (
-    <header className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-gray-900">
-              J & C Group
-            </Link>
-            <span className="ml-4 text-sm text-gray-600">
-              Come to the point, go to the root
-            </span>
+    <header>
+      {showUtilityBar && (
+        <div className="bg-gray-50 border-b border-gray-200 hidden sm:block">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+            <div className="flex justify-between items-center text-sm text-gray-600">
+              <div className="flex items-center space-x-4">
+                <Logo size="large" />
+                <span>Come to the point, go to the root</span>
+              </div>
+              <div className="flex space-x-4">
+                <span>Email: info@jcgroup.com</span>
+              </div>
+            </div>
           </div>
-          <nav className="hidden md:flex space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-gray-900">
-              Home
-            </Link>
-            <Link href="/books" className="text-gray-700 hover:text-gray-900">
-              Books
-            </Link>
-            <Link href="/blog" className="text-gray-700 hover:text-gray-900">
-              Blog
-            </Link>
-          </nav>
         </div>
-      </div>
+      )}
+      <NavBar
+        variant={isMobile ? 'dark' : 'light'}
+        isCompact={false}
+        showLogo={false}
+      />
+      {isScrolled && !isMobile && (
+        <NavBar
+          variant="dark"
+          isCompact={true}
+          showLogo={true}
+        />
+      )}
     </header>
   );
 }
