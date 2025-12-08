@@ -60,6 +60,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
     exit;
+} elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    if (!$id) {
+        echo json_encode(['success' => false, 'message' => 'Post ID required for deletion']);
+        exit;
+    }
+
+    try {
+        $stmt = $pdo->prepare("DELETE FROM posts WHERE id = ?");
+        $stmt->execute([$id]);
+        echo json_encode(['success' => true, 'message' => 'Post deleted successfully']);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    }
+    exit;
 }
 ?>
 <!DOCTYPE html>

@@ -1,16 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import PostForm from '../../../../components/PostForm';
 
 export default function EditPost() {
-  const [postId] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      const searchParams = new URLSearchParams(window.location.search);
-      return searchParams.get('id');
-    }
-    return null;
-  });
+  const [postId, setPostId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const id = searchParams.get('id');
+    setPostId(id);
+  }, [searchParams]);
 
   if (!postId) {
     return <div>Loading...</div>;

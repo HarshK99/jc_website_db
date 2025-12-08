@@ -191,6 +191,38 @@ export default function PostForm({ mode, postId }: PostFormProps) {
     setForm(prevForm => ({ ...prevForm, coverImage: '' }));
   };
 
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const url = ADMIN_ENDPOINTS.editPost + '?id=' + postId;
+      const response = await fetch(url, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        router.push('/admin/dashboard');
+      } else {
+        if (data.message && data.message.includes('Session expired')) {
+          alert('Your session has expired. Please login again.');
+          router.push('/admin/login');
+        } else {
+          alert(`Failed to delete post: ${data.message || 'Unknown error'}`);
+        }
+      }
+    } catch (err) {
+      alert('Error deleting post');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const pageTitle = mode === 'add' ? 'Add New Post' : 'Edit Post';
   const publishButtonText = loadingType === 'published'
     ? (mode === 'add' ? 'Publishing...' : 'Updating...')
@@ -408,6 +440,23 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                 The slug is the URL-friendly version of the title.
               </p>
             </div>
+
+            {/* Delete Post - Only for edit mode */}
+            {mode === 'edit' && (
+              <div className="bg-white rounded-lg shadow-sm border border-red-200 p-6">
+                <p className="text-sm text-gray-600 mb-4">
+                  Once you delete this post, there is no going back. Please be certain.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={loading}
+                  className="text-red-600 hover:text-red-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
+                >
+                  {loading ? 'Deleting...' : 'Delete this post'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

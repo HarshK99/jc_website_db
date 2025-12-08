@@ -29,10 +29,16 @@ try {
             a.avatar as authorAvatar
         FROM posts p
         LEFT JOIN authors a ON p.authorId = a.id
-        WHERE p.status = 'published'
     ";
 
     $params = [];
+
+    // Only filter by status if not fetching by id (for admin edit)
+    if (!$id) {
+        $query .= " WHERE p.status = 'published'";
+    } else {
+        $query .= " WHERE 1=1";
+    }
 
     if ($slug) {
         $query .= " AND p.slug = ?";
