@@ -19,6 +19,7 @@ export interface Post {
   coverImage: string;
   status: string;
   publishedAt: string;
+  is_recommended: boolean;
   updatedAt: string;
   authorId: number;
   authorName?: string; // From API join
@@ -37,6 +38,7 @@ export interface Book {
   buyLink: string;
   publishedYear: number;
   pages: number;
+  is_featured: boolean;
 }
 
 export interface AdminUser {
@@ -61,13 +63,4 @@ export interface Tag {
 export interface Taxonomy {
   categories: Category[];
   tags: Tag[];
-}
-
-export interface SampleData {
-  meta: Meta;
-  posts: Post[];
-  books: Book[];
-  authors: Author[];
-  adminUsers: AdminUser[];
-  taxonomy: Taxonomy;
 }

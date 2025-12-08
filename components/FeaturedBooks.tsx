@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { fetchBooks } from '../lib/api';
+import { fetchFeaturedBooks } from '../lib/api';
 import { Book } from '../lib/types';
+import BookCard from './BookCard';
 
 export default function FeaturedBooks() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -14,8 +14,8 @@ export default function FeaturedBooks() {
   useEffect(() => {
     const loadBooks = async () => {
       try {
-        const data = await fetchBooks();
-        setBooks(data.slice(0, 3)); // Show only first 3 books
+        const data = await fetchFeaturedBooks();
+        setBooks(data);
       } catch (err) {
         setError('Failed to load books');
       } finally {
@@ -71,36 +71,7 @@ export default function FeaturedBooks() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {books.map((book) => (
-            <div key={book.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="relative h-64">
-                <Image
-                  src={book.coverImage}
-                  alt={book.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {book.title}
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {book.shortDescription}
-                </p>
-                <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
-                  <span>{book.ageGroup}</span>
-                  <span>{book.publishedYear}</span>
-                </div>
-                <Link
-                  href={book.buyLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Buy Now
-                </Link>
-              </div>
-            </div>
+            <BookCard key={book.id} book={book} />
           ))}
         </div>
         <div className="text-center mt-8">

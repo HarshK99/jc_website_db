@@ -13,6 +13,7 @@ CREATE TABLE books (
     buyLink VARCHAR(255),
     publishedYear INT,
     pages INT,
+    is_featured BOOLEAN DEFAULT FALSE,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -36,6 +37,7 @@ CREATE TABLE posts (
     coverImage VARCHAR(255),
     status ENUM('draft', 'published') DEFAULT 'draft',
     publishedAt TIMESTAMP NULL,
+    is_recommended BOOLEAN DEFAULT FALSE,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     authorId INT,
     FOREIGN KEY (authorId) REFERENCES authors(id)

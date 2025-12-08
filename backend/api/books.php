@@ -11,8 +11,16 @@ try {
     require_once '../includes/functions.php';
     require_once '../config/db.php';
 
-    // Fetch all books
-    $stmt = $pdo->query("SELECT * FROM books ORDER BY publishedYear DESC");
+    // Check if featured parameter is set
+    $featured = isset($_GET['featured']) && $_GET['featured'] == '1';
+
+    // Fetch books
+    if ($featured) {
+        $stmt = $pdo->query("SELECT * FROM books WHERE is_featured = 1 ORDER BY publishedYear DESC");
+    } else {
+        $stmt = $pdo->query("SELECT * FROM books ORDER BY publishedYear DESC");
+    }
+
     $books = $stmt->fetchAll();
 
     // Return books as JSON

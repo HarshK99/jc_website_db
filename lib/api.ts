@@ -1,5 +1,4 @@
 import { Book, Post } from './types';
-import sampleData from '../data/sample-data.json';
 
 // Determine API base URL based on environment
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -19,9 +18,8 @@ export async function fetchBooks(): Promise<Book[]> {
     return data;
   } catch (error) {
     console.error('Error fetching books:', error);
-    // For development, return sample data from JSON
-    console.log('Using sample data from JSON');
-    return sampleData.books;
+    // Return empty array instead of sample data
+    return [];
   }
 }
 
@@ -41,9 +39,8 @@ export async function fetchPosts(limit?: number): Promise<Post[]> {
     return data;
   } catch (error) {
     console.error('Error fetching posts:', error);
-    // For development, return sample posts from JSON
-    console.log('Using sample posts from JSON');
-    return sampleData.posts || [];
+    // Return empty array instead of sample data
+    return [];
   }
 }
 
@@ -61,8 +58,24 @@ export async function fetchPostBySlug(slug: string): Promise<Post | null> {
     return data.length > 0 ? data[0] : null;
   } catch (error) {
     console.error('Error fetching post:', error);
-    // For development, find in sample data
-    const post = sampleData.posts?.find(p => p.slug === slug);
-    return post || null;
+    // Return null instead of sample data
+    return null;
+  }
+}
+
+export async function fetchFeaturedBooks(): Promise<Book[]> {
+  try {
+    console.log('Attempting to fetch featured books from:', `${API_BASE_URL}/api/books.php?featured=1`);
+    const response = await fetch(`${API_BASE_URL}/api/books.php?featured=1`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch featured books');
+    }
+    const data = await response.json();
+    console.log('Fetched featured books from API:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching featured books:', error);
+    // Return empty array instead of sample data
+    return [];
   }
 }

@@ -23,7 +23,7 @@ try {
     // Base query
     $query = "
         SELECT
-            p.id, p.title, p.slug, p.excerpt, p.content, p.coverImage, p.status, p.publishedAt, p.updatedAt, p.authorId,
+            p.id, p.title, p.slug, p.excerpt, p.content, p.coverImage, p.status, p.publishedAt, p.is_recommended, p.updatedAt, p.authorId,
             a.name as authorName,
             a.avatar as authorAvatar
         FROM posts p
