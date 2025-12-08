@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PostForm from '../../../../components/PostForm';
 
-export default function EditPost() {
+function EditPostContent() {
   const [postId, setPostId] = useState<string | null>(null);
   const searchParams = useSearchParams();
 
@@ -18,4 +18,12 @@ export default function EditPost() {
   }
 
   return <PostForm mode="edit" postId={postId} />;
+}
+
+export default function EditPost() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EditPostContent />
+    </Suspense>
+  );
 }
