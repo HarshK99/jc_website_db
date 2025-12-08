@@ -21,11 +21,19 @@ export default function LatestPosts({ posts, maxPosts = 5 }: LatestPostsProps) {
         {displayPosts.map((post) => (
           <article key={post.id} className="flex space-x-3">
             <div className="flex-shrink-0">
-              <img
-                src={post.coverImage || '/uploads/blog/default.jpg'}
-                alt={post.title}
-                className="w-16 h-16 object-cover rounded"
-              />
+              {post.coverImage ? (
+                <img
+                  src={post.coverImage}
+                  alt={post.title}
+                  className="w-16 h-16 object-cover rounded"
+                />
+              ) : (
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded flex items-center justify-center">
+                  <span className="text-blue-600 font-bold text-sm">
+                    {post.title ? post.title.charAt(0).toUpperCase() : 'B'}
+                  </span>
+                </div>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="font-medium text-gray-900 mb-1">

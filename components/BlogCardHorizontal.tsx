@@ -1,10 +1,10 @@
 import { Post } from '../lib/types';
 
-interface BlogPostCardProps {
+interface BlogCardHorizontalProps {
   post: Post;
 }
 
-export default function BlogPostCard({ post }: BlogPostCardProps) {
+export default function BlogCardHorizontal({ post }: BlogCardHorizontalProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -18,11 +18,19 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
       <div className="md:flex">
         <div className="md:w-1/3">
           <div className="relative h-48 md:h-full">
-            <img
-              src={post.coverImage || '/uploads/blog/default.jpg'}
-              alt={post.title}
-              className="w-full h-full object-cover"
-            />
+            {post.coverImage ? (
+              <img
+                src={post.coverImage}
+                alt={post.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                <span className="text-blue-600 font-bold text-2xl">
+                  {post.title ? post.title.charAt(0).toUpperCase() : 'B'}
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <div className="md:w-2/3 p-6">

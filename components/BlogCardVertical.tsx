@@ -1,15 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 import { Post } from '../lib/types';
 
-interface PostCardProps {
+interface BlogCardVerticalProps {
   post: Post;
   featured?: boolean;
 }
 
-export default function PostCard({ post, featured = false }: PostCardProps) {
-  const [avatarError, setAvatarError] = useState(false);
+export default function BlogCardVertical({ post, featured = false }: BlogCardVerticalProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -21,12 +19,20 @@ export default function PostCard({ post, featured = false }: PostCardProps) {
   return (
     <article className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow ${featured ? 'md:col-span-2 lg:col-span-2' : ''}`}>
       <div className={`relative ${featured ? 'h-64 md:h-80' : 'h-48'}`}>
-        <Image
-          src={post.coverImage || '/uploads/blog/default.jpg'}
-          alt={post.title}
-          fill
-          className="object-cover"
-        />
+        {post.coverImage ? (
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            fill
+            className="object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+            <span className="text-blue-600 font-bold text-3xl">
+              {post.title ? post.title.charAt(0).toUpperCase() : 'B'}
+            </span>
+          </div>
+        )}
         <div className="absolute top-4 left-4">
           <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
             Article
@@ -36,14 +42,13 @@ export default function PostCard({ post, featured = false }: PostCardProps) {
       <div className="p-6">
         <div className="flex items-center mb-3">
           <div className="flex items-center">
-            {post.authorAvatar && post.authorAvatar.trim() !== '' && !avatarError ? (
+            {post.authorAvatar && post.authorAvatar.trim() !== '' ? (
               <Image
                 src={post.authorAvatar}
                 alt={post.authorName || 'Author'}
                 width={32}
                 height={32}
                 className="rounded-full mr-3"
-                onError={() => setAvatarError(true)}
               />
             ) : (
               <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">

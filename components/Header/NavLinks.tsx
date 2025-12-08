@@ -8,7 +8,7 @@ interface NavLinksProps {
 const links = [
   { href: '/', label: 'Home' },
   { href: '/books', label: 'Books' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/blog', label: 'Blogs' },
 ];
 
 export default function NavLinks({ variant = 'light', className = '' }: NavLinksProps) {

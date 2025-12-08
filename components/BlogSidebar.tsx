@@ -2,20 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-
-interface Post {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  coverImage?: string;
-  publishedAt: string;
-  authorName?: string;
-}
+import { fetchPosts } from '../lib/api';
+import { Post } from '../lib/types';
+import BlogCardCompact from './BlogCardCompact';
 
 interface BlogSidebarProps {
-  currentPostId?: number;
-  currentPostSlug?: string;
+  currentPostId: number;
+  currentPostSlug: string;
 }
 
 export default function BlogSidebar({ currentPostId, currentPostSlug }: BlogSidebarProps) {
@@ -28,17 +21,14 @@ export default function BlogSidebar({ currentPostId, currentPostSlug }: BlogSide
 
   const fetchRelatedPosts = async () => {
     try {
-      const response = await fetch('http://localhost:8080/jc_backend/api/posts?limit=5');
-      if (response.ok) {
-        const posts = await response.json();
-        // Filter out current post and take first 4
-        const filtered = posts
-          .filter((post: Post) =>
-            post.id !== currentPostId && post.slug !== currentPostSlug
-          )
-          .slice(0, 4);
-        setRelatedPosts(filtered);
-      }
+      const posts = await fetchPosts(5);
+      // Filter out current post and take first 4
+      const filtered = posts
+        .filter((post: Post) =>
+          post.id !== currentPostId && post.slug !== currentPostSlug
+        )
+        .slice(0, 4);
+      setRelatedPosts(filtered);
     } catch (error) {
       console.error('Failed to fetch related posts:', error);
     } finally {
@@ -72,47 +62,7 @@ export default function BlogSidebar({ currentPostId, currentPostSlug }: BlogSide
 
       <div className="space-y-4">
         {relatedPosts.map((post) => (
-          <Link
-            key={post.id}
-            href={`/blog/${post.slug}`}
-            className="block group"
-          >
-            <article className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">
-              {post.coverImage && (
-                <div className="h-24 overflow-hidden">
-                  <img
-                    src={post.coverImage}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                  />
-                </div>
-              )}
-
-              <div className="p-4">
-                <h4 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 mb-2 text-sm leading-tight">
-                  {post.title.length > 60 ? post.title.substring(0, 60) + '...' : post.title}
-                </h4>
-
-                {post.excerpt && (
-                  <p className="text-sm text-gray-600 mb-2 text-xs leading-tight">
-                    {post.excerpt.length > 80 ? post.excerpt.substring(0, 80) + '...' : post.excerpt}
-                  </p>
-                )}
-
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  {post.authorName && <span>{post.authorName}</span>}
-                  {post.publishedAt && (
-                    <span>
-                      {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </article>
-          </Link>
+          <BlogCardCompact key={post.id} post={post} />
         ))}
       </div>
 
