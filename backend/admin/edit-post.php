@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 session_start([
-    'cookie_samesite' => 'None',
+    'cookie_samesite' => 'Lax',
     'cookie_secure' => false, // Set to true in production with HTTPS
     'cookie_httponly' => true,
 ]);
@@ -40,17 +40,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $publishedAt = $_POST['publishedAt'];
     $coverImage = $_POST['coverImage'] ?? '';
 
-    if ($id) {
-        // Update
-        $stmt = $pdo->prepare("UPDATE posts SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=?, coverImage=? WHERE id=?");
-        $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAt, $coverImage, $id]);
-        echo json_encode(['success' => true, 'message' => 'Post updated successfully', 'id' => $id]);
-    } else {
-        // Insert
-        $stmt = $pdo->prepare("INSERT INTO posts (title, slug, excerpt, content, status, publishedAt, coverImage, authorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAt, $coverImage, $_SESSION['admin_id']]);
-        $newId = $pdo->lastInsertId();
-        echo json_encode(['success' => true, 'message' => 'Post created successfully', 'id' => $newId]);
+    // Convert empty publishedAt to NULL
+    $publishedAtValue = empty($publishedAt) ? null : $publishedAt;
+
+    try {
+        if ($id) {
+            // Update
+            $stmt = $pdo->prepare("UPDATE posts SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=?, coverImage=? WHERE id=?");
+            $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $id]);
+            echo json_encode(['success' => true, 'message' => 'Post updated successfully', 'id' => $id]);
+        } else {
+            // Insert
+            $stmt = $pdo->prepare("INSERT INTO posts (title, slug, excerpt, content, status, publishedAt, coverImage, authorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $_SESSION['admin_id']]);
+            $newId = $pdo->lastInsertId();
+            echo json_encode(['success' => true, 'message' => 'Post created successfully', 'id' => $newId]);
+        }
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
     exit;
 }

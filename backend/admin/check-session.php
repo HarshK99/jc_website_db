@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 session_start([
-    'cookie_samesite' => 'None',
+    'cookie_samesite' => 'Lax',
     'cookie_secure' => false, // Set to true in production with HTTPS
     'cookie_httponly' => true,
 ]);

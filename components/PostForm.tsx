@@ -77,6 +77,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
   };
 
   const handleSubmit = async (status: 'draft' | 'published') => {
+    console.log('handleSubmit called with status:', status);
     setLoading(true);
     setLoadingType(status);
 
@@ -103,15 +104,16 @@ export default function PostForm({ mode, postId }: PostFormProps) {
         credentials: 'include'
       });
 
-      if (response.ok) {
+      const data = await response.json();
+
+      if (data.success) {
         router.push('/admin/dashboard');
       } else {
-        const errorData = await response.json().catch(() => ({}));
-        if (errorData.message && errorData.message.includes('Session expired')) {
+        if (data.message && data.message.includes('Session expired')) {
           alert('Your session has expired. Please login again.');
           router.push('/admin/login');
         } else {
-          alert(`Failed to ${mode === 'add' ? 'create' : 'update'} post: ${errorData.message || 'Unknown error'}`);
+          alert(`Failed to ${mode === 'add' ? 'create' : 'update'} post: ${data.message || 'Unknown error'}`);
         }
       }
     } catch (err) {
