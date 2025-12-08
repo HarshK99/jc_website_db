@@ -44,6 +44,23 @@ export async function fetchPosts(limit?: number): Promise<Post[]> {
   }
 }
 
+export async function fetchRecommendedPosts(): Promise<Post[]> {
+  try {
+    console.log('Attempting to fetch recommended posts from:', `${API_BASE_URL}/api/posts.php?recommended=1`);
+    const response = await fetch(`${API_BASE_URL}/api/posts.php?recommended=1`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch recommended posts');
+    }
+    const data = await response.json();
+    console.log('Fetched recommended posts from API:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching recommended posts:', error);
+    // Return empty array instead of sample data
+    return [];
+  }
+}
+
 export async function fetchPostBySlug(slug: string): Promise<Post | null> {
   try {
     const url = new URL(`${API_BASE_URL}/api/posts.php`);

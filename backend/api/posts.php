@@ -19,6 +19,7 @@ try {
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : null;
     $slug = isset($_GET['slug']) ? $_GET['slug'] : null;
     $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
+    $recommended = isset($_GET['recommended']) && $_GET['recommended'] == '1';
 
     // Base query
     $query = "
@@ -39,6 +40,10 @@ try {
     } elseif ($id) {
         $query .= " AND p.id = ?";
         $params[] = $id;
+    }
+
+    if ($recommended) {
+        $query .= " AND p.is_recommended = 1";
     }
 
     $query .= " ORDER BY p.publishedAt DESC";
