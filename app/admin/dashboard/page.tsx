@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ADMIN_ENDPOINTS } from '../../../lib/admin-config';
+import { ADMIN_ENDPOINTS, API_ENDPOINTS } from '../../../lib/admin-config';
 
 interface Post {
   id: number;
@@ -35,7 +35,7 @@ export default function AdminDashboard() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/backend/api/posts.php');
+      const response = await fetch(API_ENDPOINTS.posts);
       const data = await response.json();
       setPosts(data);
     } catch (err) {

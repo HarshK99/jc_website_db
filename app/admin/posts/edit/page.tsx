@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ADMIN_ENDPOINTS } from '../../../../lib/admin-config';
+import { ADMIN_ENDPOINTS, API_ENDPOINTS } from '../../../../lib/admin-config';
 
 interface Post {
   id: number;
@@ -39,7 +39,7 @@ export default function EditPost() {
 
   const fetchPost = async (postId: string) => {
     try {
-      const response = await fetch(`/backend/api/posts.php?id=${postId}`);
+      const response = await fetch(`${API_ENDPOINTS.posts}?id=${postId}`);
       const data = await response.json();
       if (data.length > 0) {
         const post = data[0];
