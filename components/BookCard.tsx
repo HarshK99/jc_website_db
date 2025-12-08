@@ -11,8 +11,8 @@ export default function BookCard({ book }: BookCardProps) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative h-64 bg-gray-200">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+      <div className="relative aspect-[3/4] bg-gray-200">
         {!imageError ? (
           <Image
             src={book.coverImage}
@@ -31,29 +31,38 @@ export default function BookCard({ book }: BookCardProps) {
             </div>
           </div>
         )}
-      </div>
-      <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-          {book.title}
-        </h3>
-        <p className="text-gray-600 mb-4">
-          {book.shortDescription}
-        </p>
-        <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
-          <span>{book.ageGroup}</span>
-          <span>{book.publishedYear}</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-500">{book.pages} pages</span>
+
+        {/* Hover overlay with more info */}
+        <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-4 text-white">
+          <h3 className="text-xl font-semibold mb-2 text-center">
+            {book.title}
+          </h3>
+          <p className="text-sm mb-4 text-center line-clamp-3">
+            {book.shortDescription}
+          </p>
+          <div className="flex justify-between items-center w-full text-xs mb-4">
+            <span>{book.ageGroup}</span>
+            <span>{book.publishedYear}</span>
+          </div>
+          <div className="text-xs mb-4">
+            {book.pages} pages
+          </div>
           <Link
             href={book.buyLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
           >
             Buy Now
           </Link>
         </div>
+      </div>
+
+      {/* Title below image */}
+      <div className="p-4">
+        <h3 className="text-lg font-semibold text-gray-900 text-center line-clamp-2">
+          {book.title}
+        </h3>
       </div>
     </div>
   );

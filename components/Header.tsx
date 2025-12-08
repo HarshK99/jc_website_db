@@ -29,13 +29,13 @@ export default function Header() {
         </div>
       )}
       <NavBar
-        variant={isMobile ? 'dark' : 'light'}
+        variant="dark"
         isCompact={false}
         showLogo={false}
       />
       {isScrolled && !isMobile && (
         <NavBar
-          variant="dark"
+          variant="light"
           isCompact={true}
           showLogo={true}
         />
