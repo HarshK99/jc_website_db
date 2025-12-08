@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { Post } from '../lib/types';
 
 interface PostCardProps {
@@ -8,6 +9,7 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post, featured = false }: PostCardProps) {
+  const [avatarError, setAvatarError] = useState(false);
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -34,14 +36,21 @@ export default function PostCard({ post, featured = false }: PostCardProps) {
       <div className="p-6">
         <div className="flex items-center mb-3">
           <div className="flex items-center">
-            {post.authorAvatar && (
+            {post.authorAvatar && post.authorAvatar.trim() !== '' && !avatarError ? (
               <Image
                 src={post.authorAvatar}
                 alt={post.authorName || 'Author'}
                 width={32}
                 height={32}
                 className="rounded-full mr-3"
+                onError={() => setAvatarError(true)}
               />
+            ) : (
+              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                <span className="text-blue-600 font-semibold text-xs">
+                  {post.authorName ? post.authorName.charAt(0).toUpperCase() : 'A'}
+                </span>
+              </div>
             )}
             <div>
               <p className="text-sm font-medium text-gray-900">{post.authorName}</p>
