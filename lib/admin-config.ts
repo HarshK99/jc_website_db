@@ -8,6 +8,7 @@ export const ADMIN_ENDPOINTS = {
   checkSession: `${ADMIN_API_BASE}/admin/check-session.php`,
   editPost: `${ADMIN_API_BASE}/admin/edit-post.php`,
   editBook: `${ADMIN_API_BASE}/admin/edit-book.php`,
+  uploadImage: `${ADMIN_API_BASE}/admin/upload-image.php`,
 } as const;
 
 export const API_ENDPOINTS = {

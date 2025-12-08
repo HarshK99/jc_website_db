@@ -9,6 +9,7 @@ interface PostFormData {
   content: string;
   status: string;
   publishedAt: string;
+  coverImage: string;
 }
 
 interface PostFormProps {
@@ -24,9 +25,13 @@ export default function PostForm({ mode, postId }: PostFormProps) {
     content: '',
     status: 'draft',
     publishedAt: '',
+    coverImage: '',
   });
   const [loading, setLoading] = useState(false);
   const [loadingType, setLoadingType] = useState<'draft' | 'published' | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const [uploadingImage, setUploadingImage] = useState(false);
   const router = useRouter();
 
   // Function to generate slug from title
@@ -59,7 +64,12 @@ export default function PostForm({ mode, postId }: PostFormProps) {
           content: post.content,
           status: post.status,
           publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : '',
+          coverImage: post.coverImage || '',
         });
+        // Set image preview if there's an existing image
+        if (post.coverImage) {
+          setImagePreview(post.coverImage);
+        }
       }
     } catch (err) {
       console.error('Failed to fetch post:', err);
@@ -128,6 +138,55 @@ export default function PostForm({ mode, postId }: PostFormProps) {
 
       return newForm;
     });
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (!selectedImage) return;
+
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedImage);
+
+      const response = await fetch(ADMIN_ENDPOINTS.uploadImage, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setForm(prevForm => ({ ...prevForm, coverImage: data.path }));
+        setSelectedImage(null); // Clear selected file after successful upload
+        alert('Image uploaded successfully!');
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        alert(`Failed to upload image: ${errorData.message || 'Unknown error'}`);
+      }
+    } catch (err) {
+      alert('Error uploading image');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreview('');
+    setForm(prevForm => ({ ...prevForm, coverImage: '' }));
   };
 
   const pageTitle = mode === 'add' ? 'Add New Post' : 'Edit Post';
@@ -233,21 +292,83 @@ export default function PostForm({ mode, postId }: PostFormProps) {
             {/* Featured Image */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">Featured Image</h3>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                <div className="text-gray-500 mb-2">
-                  <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
+
+              {imagePreview ? (
+                // Image preview with controls
+                <div className="space-y-4">
+                  <div className="relative">
+                    <img
+                      src={imagePreview.startsWith('data:') ? imagePreview : imagePreview}
+                      alt="Featured image preview"
+                      className="w-full h-48 object-cover rounded-lg border border-gray-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full text-sm"
+                      title="Remove image"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {selectedImage && !form.coverImage && (
+                    <div className="flex space-x-2">
+                      <button
+                        type="button"
+                        onClick={handleImageUpload}
+                        disabled={uploadingImage}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50"
+                      >
+                        {uploadingImage ? 'Uploading...' : 'Upload Image'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedImage(null);
+                          setImagePreview(form.coverImage || '');
+                        }}
+                        className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+
+                  {form.coverImage && (
+                    <p className="text-xs text-green-600">✓ Image uploaded successfully</p>
+                  )}
                 </div>
-                <p className="text-sm text-gray-600 mb-2">Add Featured Image</p>
-                <button
-                  type="button"
-                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                  onClick={() => alert('Image upload functionality would be implemented here')}
-                >
-                  Set Featured Image
-                </button>
-              </div>
+              ) : (
+                // Upload area
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <div className="text-gray-500 mb-2">
+                    <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-4">Add Featured Image</p>
+
+                  <div className="space-y-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label
+                      htmlFor="image-upload"
+                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
+                    >
+                      Choose Image
+                    </label>
+                    <p className="text-xs text-gray-500">Supported formats: JPEG, PNG, GIF, WebP (max 5MB)</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Excerpt */}

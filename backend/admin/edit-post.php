@@ -38,16 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $content = $_POST['content'];
     $status = $_POST['status'];
     $publishedAt = $_POST['publishedAt'];
+    $coverImage = $_POST['coverImage'] ?? '';
 
     if ($id) {
         // Update
-        $stmt = $pdo->prepare("UPDATE posts SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=? WHERE id=?");
-        $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAt, $id]);
+        $stmt = $pdo->prepare("UPDATE posts SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=?, coverImage=? WHERE id=?");
+        $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAt, $coverImage, $id]);
         echo json_encode(['success' => true, 'message' => 'Post updated successfully', 'id' => $id]);
     } else {
         // Insert
-        $stmt = $pdo->prepare("INSERT INTO posts (title, slug, excerpt, content, status, publishedAt, authorId) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAt, $_SESSION['admin_id']]);
+        $stmt = $pdo->prepare("INSERT INTO posts (title, slug, excerpt, content, status, publishedAt, coverImage, authorId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAt, $coverImage, $_SESSION['admin_id']]);
         $newId = $pdo->lastInsertId();
         echo json_encode(['success' => true, 'message' => 'Post created successfully', 'id' => $newId]);
     }
