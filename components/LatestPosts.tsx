@@ -28,8 +28,8 @@ export default function LatestPosts({ posts, maxPosts = 5 }: LatestPostsProps) {
                   className="w-16 h-16 object-cover rounded"
                 />
               ) : (
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-sm">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/30 rounded flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">
                     {post.title ? post.title.charAt(0).toUpperCase() : 'B'}
                   </span>
                 </div>
@@ -37,7 +37,7 @@ export default function LatestPosts({ posts, maxPosts = 5 }: LatestPostsProps) {
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="font-medium text-gray-900 mb-1">
-                <a href={`/blog/post?slug=${post.slug}`} className="hover:text-blue-600 transition-colors line-clamp-2 text-sm">
+                <a href={`/blog/post?slug=${post.slug}`} className="hover:text-primary transition-colors line-clamp-2 text-sm">
                   {post.title}
                 </a>
               </h4>

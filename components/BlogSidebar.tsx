@@ -69,7 +69,7 @@ export default function BlogSidebar({ currentPostId, currentPostSlug }: BlogSide
       <div className="pt-4 border-t border-gray-200">
         <Link
           href="/blog"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm"
+          className="inline-flex items-center text-primary hover:text-primary-dark font-medium text-sm"
         >
           View all articles
           <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -59,7 +59,7 @@ export default function BlogPageClient() {
             </h1>
           </div>
           <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function BlogPageClient() {
         </div>
 
         {/* Newsletter Signup */}
-        <section className="mt-16 bg-blue-50 rounded-lg p-8 text-center">
+        <section className="mt-16 bg-primary/10 rounded-lg p-8 text-center">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">
             Stay Updated
           </h3>
@@ -145,9 +145,9 @@ export default function BlogPageClient() {
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             />
-            <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
               Subscribe
             </button>
           </div>

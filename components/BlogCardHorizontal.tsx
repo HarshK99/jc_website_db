@@ -25,8 +25,8 @@ export default function BlogCardHorizontal({ post }: BlogCardHorizontalProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                <span className="text-blue-600 font-bold text-2xl">
+              <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/30 flex items-center justify-center">
+                <span className="text-primary font-bold text-2xl">
                   {post.title ? post.title.charAt(0).toUpperCase() : 'B'}
                 </span>
               </div>
@@ -43,8 +43,8 @@ export default function BlogCardHorizontal({ post }: BlogCardHorizontalProps) {
                   className="w-8 h-8 rounded-full mr-3"
                 />
               ) : (
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-blue-600 font-semibold text-xs">
+                <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-primary font-semibold text-xs">
                     {post.authorName ? post.authorName.charAt(0).toUpperCase() : 'A'}
                   </span>
                 </div>
@@ -58,7 +58,7 @@ export default function BlogCardHorizontal({ post }: BlogCardHorizontalProps) {
             </div>
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-3">
-            <a href={`/blog/post?slug=${post.slug}`} className="hover:text-blue-600 transition-colors">
+            <a href={`/blog/post?slug=${post.slug}`} className="hover:text-primary transition-colors">
               {post.title}
             </a>
           </h3>
@@ -68,7 +68,7 @@ export default function BlogCardHorizontal({ post }: BlogCardHorizontalProps) {
           <div className="flex items-center justify-between">
             <a
               href={`/blog/post?slug=${post.slug}`}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="text-primary hover:text-primary-dark font-medium"
             >
               Read More →
             </a>

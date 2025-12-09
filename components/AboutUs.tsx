@@ -17,7 +17,7 @@ export default function AboutUs() {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <section className="py-20 bg-gradient-to-br from-primary/10 via-white to-secondary/10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="text-center mb-16">

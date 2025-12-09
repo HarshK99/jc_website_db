@@ -270,7 +270,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
               type="button"
               onClick={() => handleSubmit('published')}
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50"
+              className="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-md font-medium disabled:opacity-50"
             >
               {publishButtonText}
             </button>
@@ -391,7 +391,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                     />
                     <label
                       htmlFor="image-upload"
-                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
+                      className="inline-block bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
                     >
                       Choose Image
                     </label>
@@ -411,7 +411,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                     name="is_recommended"
                     checked={form.is_recommended}
                     onChange={(e) => setForm(prevForm => ({ ...prevForm, is_recommended: e.target.checked }))}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                   />
                   <span className="ml-2 text-sm text-gray-700">Recommended Post</span>
                 </label>

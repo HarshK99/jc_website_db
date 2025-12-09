@@ -76,8 +76,8 @@ export default function BlogPostClient() {
                     <div className="flex items-center space-x-6 text-sm text-gray-500">
                       {post.authorName && (
                         <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            <span className="text-blue-600 font-semibold text-xs">
+                          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                            <span className="text-primary font-semibold text-xs">
                               {post.authorName.charAt(0).toUpperCase()}
                             </span>
                           </div>
@@ -101,7 +101,7 @@ export default function BlogPostClient() {
                     {post.tags && post.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {post.tags.map((tag) => (
-                          <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary-dark">
                             #{tag}
                           </span>
                         ))}

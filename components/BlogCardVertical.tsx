@@ -27,14 +27,14 @@ export default function BlogCardVertical({ post, featured = false }: BlogCardVer
             className="object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-            <span className="text-blue-600 font-bold text-3xl">
+          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/30 flex items-center justify-center">
+            <span className="text-primary font-bold text-3xl">
               {post.title ? post.title.charAt(0).toUpperCase() : 'B'}
             </span>
           </div>
         )}
         <div className="absolute top-4 left-4">
-          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+          <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
             Article
           </span>
         </div>
@@ -51,8 +51,8 @@ export default function BlogCardVertical({ post, featured = false }: BlogCardVer
                 className="rounded-full mr-3"
               />
             ) : (
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                <span className="text-blue-600 font-semibold text-xs">
+              <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mr-3">
+                <span className="text-primary font-semibold text-xs">
                   {post.authorName ? post.authorName.charAt(0).toUpperCase() : 'A'}
                 </span>
               </div>
@@ -64,7 +64,7 @@ export default function BlogCardVertical({ post, featured = false }: BlogCardVer
           </div>
         </div>
         <h3 className={`font-bold text-gray-900 mb-3 ${featured ? 'text-xl md:text-2xl' : 'text-lg'}`}>
-          <Link href={`/blog/post?slug=${post.slug}`} className="hover:text-blue-600 transition-colors">
+          <Link href={`/blog/post?slug=${post.slug}`} className="hover:text-primary transition-colors">
             {post.title}
           </Link>
         </h3>
@@ -74,7 +74,7 @@ export default function BlogCardVertical({ post, featured = false }: BlogCardVer
         <div className="flex items-center justify-between">
           <Link
             href={`/blog/post?slug=${post.slug}`}
-            className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+            className="text-primary hover:text-primary-dark font-medium text-sm"
           >
             Read More →
           </Link>

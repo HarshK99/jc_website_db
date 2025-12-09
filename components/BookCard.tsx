@@ -51,7 +51,7 @@ export default function BookCard({ book }: BookCardProps) {
             href={book.buyLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition-colors"
           >
             Buy Now
           </Link>
