@@ -89,7 +89,7 @@ export default function BlogPageClient() {
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             {searchQuery
               ? `Found ${filteredPosts.length} blog post${filteredPosts.length !== 1 ? 's' : ''} matching your search.`
-              : 'Insights, stories, and expert advice on children\'s literature, reading development, and the magic of storytelling.'
+              : 'Insights, stories, and expert advice on literature'
             }
           </p>
         </div>
@@ -138,8 +138,7 @@ export default function BlogPageClient() {
             Stay Updated
           </h3>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Subscribe to our newsletter for the latest articles, book recommendations,
-            and insights on children's literature.
+            Subscribe to our newsletter for the latest articles, book recommendations
           </p>
           <div className="max-w-md mx-auto flex gap-4">
             <input

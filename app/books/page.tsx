@@ -65,8 +65,8 @@ export default function BooksPage() {
             Our Books
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Discover our carefully crafted collection of children's books designed to entertain,
-            educate, and inspire young readers.
+            Discover our carefully crafted collection of books designed to entertain,
+            educate, and inspire readers.
           </p>
         </div>
         <BookList books={books} />

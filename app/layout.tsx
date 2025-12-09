@@ -17,7 +17,7 @@ const crimsonText = Crimson_Text({
 });
 
 export const metadata: Metadata = {
-  title: "J & C Group - Children's Books Publisher",
+  title: "J & C Group - News Channel and Books Publisher",
   description: "Come to the point, go to the root. Publishing stories that inspire young minds.",
 };
 
