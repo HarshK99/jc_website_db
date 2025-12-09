@@ -21,7 +21,8 @@ export default function Header() {
   });
 
   return (
-    <header className={isScrolled ?'sticky top-0 z-50' : ''}>
+    <>
+    <header>
       {showUtilityBar && (
         <div className="bg-gray-50 border-b border-gray-200 hidden sm:block">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
@@ -40,19 +41,25 @@ export default function Header() {
           </div>
         </div>
       )}
-      {!isScrolled ? (
+      {!isScrolled && (
         <NavBar
           variant="dark"
           isSticky={false}
           showLogo={!isMobile ? false : true}
         />
-      ) : (
+      )}
+    </header>
+    {isScrolled && (
+    <header className={(isScrolled || isMobile) ? 'sticky top-0 z-50' : ''}>
+     
         <NavBar
           variant="light"
           isSticky={true}
           showLogo={true}
         />
-      )}
-    </header>
+      
+    </header>)}
+    </>
+    
   );
 }
