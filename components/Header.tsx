@@ -41,16 +41,15 @@ export default function Header() {
           </div>
         </div>
       )}
-      {!isScrolled && (
-        <NavBar
+      <NavBar
           variant="dark"
           isSticky={false}
           showLogo={!isMobile ? false : true}
         />
-      )}
+      
     </header>
     {isScrolled && (
-    <header className={(isScrolled || isMobile) ? 'sticky top-0 z-50' : ''}>
+    <header className='sticky top-0 z-50 compact-header'>
      
         <NavBar
           variant="light"
