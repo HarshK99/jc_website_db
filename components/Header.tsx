@@ -42,7 +42,7 @@ export default function Header() {
         </div>
       )}
       <NavBar
-          variant="dark"
+          variant={!isMobile ? "dark" : "light"}
           isSticky={false}
           showLogo={!isMobile ? false : true}
         />

@@ -69,7 +69,7 @@ export default function NavBar({ variant = 'light', isSticky = false, showLogo =
               <Search />
             </div>
             {isSticky && (
-              <div className="hidden md:block pb-4 px-4 flex justify-end">
+              <div className="hidden md:block pb-4 px-4">
                 <Search />
               </div>
             )}

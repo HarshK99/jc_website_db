@@ -12,7 +12,7 @@ export default function Logo({ variant = 'light', size = 'large' }: LogoProps) {
   return (
     <Link href="/" className="block">
       <img
-        src="/logo.jpeg"
+        src="/logo_bg.png"
         alt="J & C Group"
         className={`${sizeClass} ${filterClass} transition-opacity hover:opacity-80`}
       />
