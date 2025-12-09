@@ -25,7 +25,7 @@ export default function NavBar({ variant = 'light', isSticky = false, showLogo =
     <div className={`relative ${bgClass} ${backdropClass} ${shadowClass} ${positionClass} transition-all duration-300`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center py-4">
-          {showLogo && <Logo size='small' />}
+          {showLogo && <Logo size='large' />}
           <div className="flex-1 flex justify-center">
             <NavLinks variant={variant} className="hidden md:flex" />
           </div>
