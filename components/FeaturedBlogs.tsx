@@ -81,7 +81,7 @@ export default function FeaturedBlogs() {
         <div className="text-center mt-8">
           <Link
             href="/blog"
-            className="inline-block bg-gray-900 text-white px-6 py-3 rounded-md hover:bg-gray-800 transition-colors"
+            className="inline-block bg-primary text-white px-6 py-3 rounded-md hover:bg-primary-dark transition-colors"
           >
             View All Blogs
           </Link>

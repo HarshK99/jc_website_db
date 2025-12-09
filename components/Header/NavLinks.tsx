@@ -6,15 +6,15 @@ interface NavLinksProps {
 }
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/books', label: 'Books' },
-  { href: '/blog', label: 'Blogs' },
+  { href: '/', label: 'HOME' },
+  { href: '/books', label: 'BOOKS' },
+  { href: '/blog', label: 'BLOGS' },
 ];
 
 export default function NavLinks({ variant = 'light', className = '' }: NavLinksProps) {
-  const baseClasses = 'transition-colors duration-200';
-  const lightClasses = 'text-gray-700 hover:text-gray-900';
-  const darkClasses = 'text-white hover:text-gray-200';
+  const baseClasses = 'text-bold transition-colors duration-200';
+  const lightClasses = 'text-gray-700 hover:text-primary-dark';
+  const darkClasses = 'text-white hover:text-primary';
 
   const linkClasses = variant === 'dark' ? darkClasses : lightClasses;
 
