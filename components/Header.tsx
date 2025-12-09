@@ -4,6 +4,7 @@ import { useScrollPosition } from '../lib/hooks/useScrollPosition';
 import { useIsMobile } from '../lib/hooks/useIsMobile';
 import NavBar from './Header/NavBar';
 import Logo from './Header/Logo';
+import Search from './Search';
 
 export default function Header() {
   const isScrolled = useScrollPosition(120);
@@ -22,7 +23,7 @@ export default function Header() {
                 <span>Come to the point, go to the root</span>
               </div>
               <div className="flex space-x-4">
-                <span>Email: info@jcgroup.com</span>
+                <Search />
               </div>
             </div>
           </div>
