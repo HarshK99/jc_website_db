@@ -18,7 +18,7 @@ export default function RecommendedPosts({ posts }: RecommendedPostsProps) {
         {posts.map((post) => (
           <article key={post.id} className="border-b border-gray-100 pb-4 last:border-b-0 last:pb-0">
             <h4 className="font-semibold text-gray-900 mb-2">
-              <a href={`/blog/${post.slug}`} className="hover:text-blue-600 transition-colors line-clamp-2">
+              <a href={`/blog/post?slug=${post.slug}`} className="hover:text-blue-600 transition-colors line-clamp-2">
                 {post.title}
               </a>
             </h4>

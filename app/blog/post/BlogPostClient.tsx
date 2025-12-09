@@ -1,29 +1,58 @@
-import { fetchPosts, fetchPostBySlug } from '../../../lib/api';
-import { notFound } from 'next/navigation';
+'use client';
+
+import { fetchPostBySlug } from '../../../lib/api';
+import { useEffect, useState } from 'react';
+import { Post } from '../../../lib/types';
 import BlogSidebar from '../../../components/BlogSidebar';
+import { useSearchParams } from 'next/navigation';
 
-export async function generateStaticParams() {
-  try {
-    const posts = await fetchPosts();
-    return posts.map((post) => ({
-      slug: post.slug,
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
+export default function BlogPostClient() {
+  const searchParams = useSearchParams();
+  const slug = searchParams.get('slug');
+
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!slug) {
+      setError('No slug provided');
+      setLoading(false);
+      return;
+    }
+
+    async function loadPost() {
+      try {
+        const data = await fetchPostBySlug(slug!);
+        if (data) {
+          setPost(data);
+        } else {
+          setError('Post not found');
+        }
+      } catch (err) {
+        console.error('Error loading post:', err);
+        setError('Failed to load post');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPost();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-xl text-gray-600">Loading...</div>
+      </div>
+    );
   }
-}
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
-
-export default async function BlogPost({ params }: PageProps) {
-  const { slug } = await params;
-  const post = await fetchPostBySlug(slug);
-
-  if (!post) {
-    notFound();
+  if (error || !post) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-xl text-gray-600">{error || 'Post not found'}</div>
+      </div>
+    );
   }
 
   return (

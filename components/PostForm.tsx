@@ -441,7 +441,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">Slug</h3>
               <div className="flex items-center">
-                <span className="text-gray-500 mr-2">/blog/</span>
+                <span className="text-gray-500 mr-2">/blog/post?slug=</span>
                 <input
                   type="text"
                   name="slug"

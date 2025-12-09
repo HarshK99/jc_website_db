@@ -64,7 +64,7 @@ export default function BlogCardVertical({ post, featured = false }: BlogCardVer
           </div>
         </div>
         <h3 className={`font-bold text-gray-900 mb-3 ${featured ? 'text-xl md:text-2xl' : 'text-lg'}`}>
-          <Link href={`/blog/${post.slug}`} className="hover:text-blue-600 transition-colors">
+          <Link href={`/blog/post?slug=${post.slug}`} className="hover:text-blue-600 transition-colors">
             {post.title}
           </Link>
         </h3>
@@ -73,7 +73,7 @@ export default function BlogCardVertical({ post, featured = false }: BlogCardVer
         </p>
         <div className="flex items-center justify-between">
           <Link
-            href={`/blog/${post.slug}`}
+            href={`/blog/post?slug=${post.slug}`}
             className="text-blue-600 hover:text-blue-700 font-medium text-sm"
           >
             Read More →

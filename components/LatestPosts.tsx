@@ -37,7 +37,7 @@ export default function LatestPosts({ posts, maxPosts = 5 }: LatestPostsProps) {
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="font-medium text-gray-900 mb-1">
-                <a href={`/blog/${post.slug}`} className="hover:text-blue-600 transition-colors line-clamp-2 text-sm">
+                <a href={`/blog/post?slug=${post.slug}`} className="hover:text-blue-600 transition-colors line-clamp-2 text-sm">
                   {post.title}
                 </a>
               </h4>

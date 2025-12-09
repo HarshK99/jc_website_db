@@ -8,7 +8,7 @@ interface BlogCardCompactProps {
 export default function BlogCardCompact({ post }: BlogCardCompactProps) {
   return (
     <Link
-      href={`/blog/${post.slug}`}
+      href={`/blog/post?slug=${post.slug}`}
       className="block group"
     >
       <article className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">
