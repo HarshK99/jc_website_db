@@ -26,6 +26,72 @@ interface BookFormProps {
   bookId?: string;
 }
 
+// Reusable form components
+interface FormFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+  min?: string | number;
+  max?: string | number;
+  step?: string | number;
+  rows?: number;
+  as?: 'input' | 'textarea';
+}
+
+const FormField: React.FC<FormFieldProps> = ({
+  label,
+  name,
+  value,
+  onChange,
+  type = 'text',
+  placeholder,
+  required = false,
+  min,
+  max,
+  step,
+  rows = 3,
+  as = 'input'
+}) => {
+  const inputClasses = "bg-white w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+      {as === 'textarea' ? (
+        <textarea
+          name={name}
+          value={value}
+          onChange={onChange}
+          rows={rows}
+          className={inputClasses}
+          placeholder={placeholder}
+          required={required}
+        />
+      ) : (
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          className={inputClasses}
+          placeholder={placeholder}
+          required={required}
+          min={min}
+          max={max}
+          step={step}
+        />
+      )}
+    </div>
+  );
+};
+
 export default function BookForm({ mode, bookId }: BookFormProps) {
   const [form, setForm] = useState<BookFormData>({
     title: '',
@@ -219,72 +285,51 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter book title"
-          />
-        </div>
+        <FormField
+          label="Title"
+          name="title"
+          value={form.title}
+          onChange={handleInputChange}
+          placeholder="Enter book title"
+          required
+        />
 
-        {/* Slug */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
-          <input
-            type="text"
-            name="slug"
-            value={form.slug}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="book-slug-url"
-          />
-        </div>
+        <FormField
+          label="Slug"
+          name="slug"
+          value={form.slug}
+          onChange={handleInputChange}
+          placeholder="book-slug-url"
+          required
+        />
 
-        {/* Short Description */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Short Description</label>
-          <textarea
-            name="shortDescription"
-            value={form.shortDescription}
-            onChange={handleInputChange}
-            rows={3}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Brief description for listings"
-          />
-        </div>
+        <FormField
+          label="Short Description"
+          name="shortDescription"
+          value={form.shortDescription}
+          onChange={handleInputChange}
+          as="textarea"
+          rows={3}
+          placeholder="Brief description for listings"
+        />
 
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Full Description</label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleInputChange}
-            rows={6}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Detailed book description (HTML allowed)"
-          />
-        </div>
+        <FormField
+          label="Full Description"
+          name="description"
+          value={form.description}
+          onChange={handleInputChange}
+          as="textarea"
+          rows={6}
+          placeholder="Detailed book description (HTML allowed)"
+        />
 
-        {/* Age Group */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Age Group</label>
-          <input
-            type="text"
-            name="ageGroup"
-            value={form.ageGroup}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="e.g., 6–9 years"
-          />
-        </div>
+        <FormField
+          label="Age Group"
+          name="ageGroup"
+          value={form.ageGroup}
+          onChange={handleInputChange}
+          placeholder="e.g., 6–9 years"
+        />
 
         {/* Cover Image */}
         <div>
@@ -296,13 +341,12 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
               onChange={handleImageChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-            <input
-              type="text"
+            <FormField
+              label=""
               name="coverImage"
               value={form.coverImage}
               onChange={handleInputChange}
               placeholder="Or enter image URL"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {imagePreview && (
               <div className="mt-4">
@@ -312,100 +356,71 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
           </div>
         </div>
 
-        {/* Buy Link */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Buy Link</label>
-          <input
-            type="url"
-            name="buyLink"
-            value={form.buyLink}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="https://..."
-          />
-        </div>
+        <FormField
+          label="Buy Link"
+          name="buyLink"
+          value={form.buyLink}
+          onChange={handleInputChange}
+          type="url"
+          placeholder="https://..."
+        />
 
-        {/* ISBN */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">ISBN</label>
-          <input
-            type="text"
-            name="isbn"
-            value={form.isbn}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="9788123456789"
-          />
-        </div>
+        <FormField
+          label="ISBN"
+          name="isbn"
+          value={form.isbn}
+          onChange={handleInputChange}
+          placeholder="9788123456789"
+        />
 
-        {/* Author */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Author</label>
-          <input
-            type="text"
-            name="author"
-            value={form.author}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Author name"
-          />
-        </div>
+        <FormField
+          label="Author"
+          name="author"
+          value={form.author}
+          onChange={handleInputChange}
+          placeholder="Author name"
+        />
 
-        {/* Category */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-          <input
-            type="text"
-            name="category"
-            value={form.category}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Fiction, Adventure, etc."
-          />
-        </div>
+        <FormField
+          label="Category"
+          name="category"
+          value={form.category}
+          onChange={handleInputChange}
+          placeholder="Fiction, Adventure, etc."
+        />
 
-        {/* Price */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
-          <input
-            type="number"
-            name="price"
-            value={form.price}
-            onChange={handleInputChange}
-            min="0"
-            step="0.01"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="299.00"
-          />
-        </div>
+        <FormField
+          label="Price (₹)"
+          name="price"
+          value={form.price}
+          onChange={handleInputChange}
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="299.00"
+        />
 
         {/* Published Year and Pages */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Published Year</label>
-            <input
-              type="number"
-              name="publishedYear"
-              value={form.publishedYear}
-              onChange={handleInputChange}
-              min="1900"
-              max="2030"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="2024"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Pages</label>
-            <input
-              type="number"
-              name="pages"
-              value={form.pages}
-              onChange={handleInputChange}
-              min="1"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="32"
-            />
-          </div>
+          <FormField
+            label="Published Year"
+            name="publishedYear"
+            value={form.publishedYear}
+            onChange={handleInputChange}
+            type="number"
+            min="1900"
+            max="2030"
+            placeholder="2024"
+          />
+          <FormField
+            label="Pages"
+            name="pages"
+            value={form.pages}
+            onChange={handleInputChange}
+            type="number"
+            min="1"
+            placeholder="32"
+          />
         </div>
 
         {/* Featured */}
