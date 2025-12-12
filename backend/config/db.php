@@ -1,8 +1,8 @@
 <?php
 // Database configuration - Environment-aware setup
 
-// Check if we're in production (Hostinger) or development (localhost)
-$isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'hostingersite.com') !== false;
+// Check if we're in production (jncnews.in) or development (localhost)
+$isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'jncnews.in') !== false;
 
 // Define base URL for the application
 $baseUrl = $isProduction ? 'https://jncnews.in/backend' : 'http://localhost:8080/jc_backend';

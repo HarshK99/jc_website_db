@@ -2,7 +2,7 @@
 // CORS configuration constants
 
 // Environment detection
-$isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'hostingersite.com') !== false;
+$isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'jncnews.in') !== false;
 
 // Allowed origins for CORS
 $ALLOWED_ORIGINS = [
