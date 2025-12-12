@@ -18,41 +18,42 @@ session_start([
 ]);
 require_once '../config/db.php';
 
-if (!isset($_SESSION['admin_id'])) {
-    echo json_encode(['success' => false, 'message' => 'Session expired. Please login again.']);
-    exit;
-}
+try {
 
-$id = $_GET['id'] ?? null;
-$post = null;
-if ($id) {
-    $stmt = $pdo->prepare("SELECT * FROM posts WHERE id = ?");
-    $stmt->execute([$id]);
-    $post = $stmt->fetch();
-}
+    $id = $_GET['id'] ?? null;
+    $post = null;
+    if ($id) {
+        $stmt = $pdo->prepare("SELECT * FROM posts WHERE id = ?");
+        $stmt->execute([$id]);
+        $post = $stmt->fetch();
+    }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$id) {
         echo json_encode(['success' => false, 'message' => 'Post ID required']);
         exit;
     }
 
-    // Fetch post with tags
-    $stmt = $pdo->prepare("
-        SELECT p.*, GROUP_CONCAT(pt.tag) as tags
-        FROM posts p
-        LEFT JOIN post_tags pt ON p.id = pt.postId
-        WHERE p.id = ?
-        GROUP BY p.id
-    ");
-    $stmt->execute([$id]);
-    $post = $stmt->fetch();
+    try {
+        // Fetch post with tags
+        $stmt = $pdo->prepare("
+            SELECT p.*, GROUP_CONCAT(pt.tag) as tags
+            FROM posts p
+            LEFT JOIN post_tags pt ON p.id = pt.postId
+            WHERE p.id = ?
+            GROUP BY p.id
+        ");
+        $stmt->execute([$id]);
+        $post = $stmt->fetch();
 
-    if ($post) {
-        $post['tags'] = $post['tags'] ? explode(',', $post['tags']) : [];
-        echo json_encode($post);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Post not found']);
+        if ($post) {
+            $post['tags'] = $post['tags'] ? explode(',', $post['tags']) : [];
+            echo json_encode($post);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Post not found']);
+        }
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
     exit;
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -116,6 +117,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
+    exit;
+}
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
     exit;
 }
 ?>

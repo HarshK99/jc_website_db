@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ADMIN_ENDPOINTS, API_ENDPOINTS } from '../lib/admin-config';
 
@@ -37,10 +37,6 @@ export default function PostForm({ mode, postId }: PostFormProps) {
   const [imagePreview, setImagePreview] = useState<string>('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [tagInput, setTagInput] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
-  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   // Function to generate slug from title
@@ -227,51 +223,14 @@ export default function PostForm({ mode, postId }: PostFormProps) {
   };
 
   // Tag management functions
-  const fetchTagSuggestions = async (query: string) => {
-    try {
-      const response = await fetch(`${API_ENDPOINTS.baseUrl}/api/tags.php?q=${encodeURIComponent(query)}`);
-      const tags = await response.json();
-      setSuggestions(tags.filter((tag: string) => !form.tags.includes(tag)));
-    } catch (err) {
-      console.error('Failed to fetch tag suggestions:', err);
-    }
-  };
-
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setTagInput(value);
-
-    // Extract current word being typed (after last comma)
-    const words = value.split(',');
-    const currentWord = words[words.length - 1].trim();
-
-    if (currentWord.length > 0) {
-      fetchTagSuggestions(currentWord);
-      setShowSuggestions(true);
-      setSelectedSuggestionIndex(-1);
-    } else {
-      setShowSuggestions(false);
-    }
+    setTagInput(e.target.value);
   };
 
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
       addTagsFromInput();
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setSelectedSuggestionIndex(prev =>
-        prev < suggestions.length - 1 ? prev + 1 : prev
-      );
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setSelectedSuggestionIndex(prev => prev > 0 ? prev - 1 : -1);
-    } else if (e.key === 'Tab' && showSuggestions && selectedSuggestionIndex >= 0) {
-      e.preventDefault();
-      selectSuggestion(suggestions[selectedSuggestionIndex]);
-    } else if (e.key === 'Escape') {
-      setShowSuggestions(false);
-      setSelectedSuggestionIndex(-1);
     }
   };
 
@@ -289,28 +248,12 @@ export default function PostForm({ mode, postId }: PostFormProps) {
     }
 
     setTagInput('');
-    setShowSuggestions(false);
-    setSelectedSuggestionIndex(-1);
-  };
-
-  const selectSuggestion = (suggestion: string) => {
-    const words = tagInput.split(',');
-    words[words.length - 1] = suggestion;
-    const newInput = words.join(', ') + ', ';
-
-    setTagInput(newInput);
-    setShowSuggestions(false);
-    setSelectedSuggestionIndex(-1);
-
-    // Focus back to input
-    setTimeout(() => inputRef.current?.focus(), 0);
   };
 
   const handleTagInputBlur = () => {
     if (tagInput.trim()) {
       addTagsFromInput();
     }
-    setTimeout(() => setShowSuggestions(false), 150); // Delay to allow clicks
   };
 
   const removeTag = (index: number) => {
@@ -533,41 +476,19 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                 </div>
               )}
               
-              {/* Tag input with autocomplete */}
-              <div className="relative">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={tagInput}
-                  onChange={handleTagInputChange}
-                  onKeyDown={handleTagInputKeyDown}
-                  onBlur={handleTagInputBlur}
-                  placeholder="Type tags separated by commas (e.g., reading, child-development)"
-                  className="w-full p-2 border border-gray-300 rounded-md text-sm"
-                />
-                
-                {/* Autocomplete dropdown */}
-                {showSuggestions && suggestions.length > 0 && (
-                  <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-40 overflow-y-auto">
-                    {suggestions.map((suggestion, index) => (
-                      <div
-                        key={suggestion}
-                        className={`px-3 py-2 cursor-pointer text-sm ${
-                          index === selectedSuggestionIndex 
-                            ? 'bg-blue-100 text-blue-900' 
-                            : 'hover:bg-gray-100'
-                        }`}
-                        onClick={() => selectSuggestion(suggestion)}
-                      >
-                        {suggestion}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* Tag input */}
+              <input
+                type="text"
+                value={tagInput}
+                onChange={handleTagInputChange}
+                onKeyDown={handleTagInputKeyDown}
+                onBlur={handleTagInputBlur}
+                placeholder="Type tags separated by commas (e.g., reading, child-development)"
+                className="w-full p-2 border border-gray-300 rounded-md text-sm"
+              />
               
               <p className="text-xs text-gray-500 mt-2">
-                Type tags separated by commas. Press Enter or Tab to autocomplete.
+                Type tags separated by commas. Press Enter to add them.
               </p>
               
               {/* Recommended checkbox */}
