@@ -72,8 +72,8 @@ export default function BlogPostClient() {
                     <p className="text-xl text-gray-400 leading-relaxed mb-8 font-light">{post.excerpt}</p>
                   )}
 
-                  <div className="flex items-center justify-between border-b border-gray-200 pb-6">
-                    <div className="flex items-center space-x-6 text-sm text-gray-500">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-200 pb-6 space-y-4 md:space-y-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-500">
                       {post.authorName && (
                         <div className="flex items-center space-x-2">
                           <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
@@ -124,7 +124,7 @@ export default function BlogPostClient() {
                 {/* Article Content with generous padding */}
                 <div className="prose prose-lg prose-gray max-w-none">
                   <div
-                    className="text-gray-800 leading-relaxed px-16"
+                    className="text-gray-800 leading-relaxed lg:px-18"
                     dangerouslySetInnerHTML={{ __html: post.content }}
                   />
                 </div>
