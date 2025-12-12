@@ -1,6 +1,6 @@
 // Admin API configuration
 export const ADMIN_API_BASE = process.env.NODE_ENV === 'production'
-  ? 'https://slateblue-cheetah-410739.hostingersite.com/backend'
+  ? 'https://jncnews.in/backend'
   : 'http://localhost:8080/jc_backend';
 
 export const ADMIN_ENDPOINTS = {

@@ -7,11 +7,11 @@ $isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'h
 // Allowed origins for CORS
 $ALLOWED_ORIGINS = [
     'http://localhost:3000',  // Next.js development server
-    'https://slateblue-cheetah-410739.hostingersite.com'  // Production domain
+    'https://jncnews.in'  // Production domain
 ];
 
 // Default origin (fallback)
-$DEFAULT_ORIGIN = $isProduction ? 'https://slateblue-cheetah-410739.hostingersite.com' : 'http://localhost:3000';
+$DEFAULT_ORIGIN = $isProduction ? 'https://jncnews.in' : 'http://localhost:3000';
 
 /**
  * Get the appropriate CORS origin based on the request

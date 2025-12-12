@@ -5,16 +5,16 @@
 $isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'hostingersite.com') !== false;
 
 // Define base URL for the application
-$baseUrl = $isProduction ? 'https://slateblue-cheetah-410739.hostingersite.com/backend' : 'http://localhost:8080/jc_backend';
+$baseUrl = $isProduction ? 'https://jncnews.in/backend' : 'http://localhost:8080/jc_backend';
 
 // Define base URL for uploads (served directly from web root)
-$uploadBaseUrl = $isProduction ? 'https://slateblue-cheetah-410739.hostingersite.com' : 'http://localhost:8080';
+$uploadBaseUrl = $isProduction ? 'https://jncnews.in' : 'http://localhost:8080';
 
 if ($isProduction) {
     // Production configuration (Hostinger)
     $host = 'localhost';
-    $dbname = 'u457360812_jc_website_db';
-    $username = 'u457360812_jc';
+    $dbname = 'u457360812_jcnews';
+    $username = 'u457360812_jcadmin';
     $password = 'Jc@admin9';
 } else {
     // Development configuration (XAMPP/localhost)

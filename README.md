@@ -50,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 
 4. **Environment URLs**:
    - **Development**: `http://localhost:8080` (configured in `lib/api.ts`)
-   - **Production**: `https://slateblue-cheetah-410739.hostingersite.com/backend` (set in `.env.local`)
+   - **Production**: `https://jncnews.in/backend` (set in `.env.local`)
 
 ### Database Configuration
 
