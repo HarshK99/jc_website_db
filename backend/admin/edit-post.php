@@ -18,6 +18,11 @@ session_start([
 ]);
 require_once '../config/db.php';
 
+if (!isset($_SESSION['admin_id'])) {
+    echo json_encode(['success' => false, 'message' => 'Session expired. Please login again.']);
+    exit;
+}
+
 try {
 
     $id = $_GET['id'] ?? null;
