@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { ADMIN_ENDPOINTS, API_ENDPOINTS } from '../lib/admin-config';
 
@@ -11,6 +11,7 @@ interface PostFormData {
   publishedAt: string;
   coverImage: string;
   is_recommended: boolean;
+  tags: string[];
 }
 
 interface PostFormProps {
@@ -28,12 +29,18 @@ export default function PostForm({ mode, postId }: PostFormProps) {
     publishedAt: '',
     coverImage: '',
     is_recommended: false,
+    tags: [],
   });
   const [loading, setLoading] = useState(false);
   const [loadingType, setLoadingType] = useState<'draft' | 'published' | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [tagInput, setTagInput] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   // Function to generate slug from title
@@ -55,10 +62,12 @@ export default function PostForm({ mode, postId }: PostFormProps) {
 
   const fetchPost = async (id: string) => {
     try {
-      const response = await fetch(`${API_ENDPOINTS.posts}?id=${id}`);
+      const response = await fetch(`${ADMIN_ENDPOINTS.editPost}?id=${id}`, {
+        credentials: 'include'
+      });
       const data = await response.json();
-      if (data.length > 0) {
-        const post = data[0];
+      if (data.id) {
+        const post = data;
         setForm({
           title: post.title,
           slug: post.slug,
@@ -68,6 +77,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
           publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : '',
           coverImage: post.coverImage || '',
           is_recommended: post.is_recommended || false,
+          tags: post.tags || [],
         });
         // Set image preview if there's an existing image
         if (post.coverImage) {
@@ -134,13 +144,20 @@ export default function PostForm({ mode, postId }: PostFormProps) {
       }
       // For edit mode, keep the existing publishedAt
 
-      const formData = { 
-        ...form, 
-        coverImage,
-        status, 
-        publishedAt,
-        is_recommended: form.is_recommended ? '1' : '0'
-      };
+      const formData = new URLSearchParams();
+      formData.append('title', form.title);
+      formData.append('slug', form.slug);
+      formData.append('excerpt', form.excerpt);
+      formData.append('content', form.content);
+      formData.append('status', status);
+      formData.append('publishedAt', publishedAt);
+      formData.append('coverImage', coverImage);
+      formData.append('is_recommended', form.is_recommended ? '1' : '0');
+      
+      // Add tags as array
+      form.tags.forEach(tag => {
+        formData.append('tags[]', tag);
+      });
       const url = mode === 'edit' && postId
         ? ADMIN_ENDPOINTS.editPost + '?id=' + postId
         : ADMIN_ENDPOINTS.editPost;
@@ -207,6 +224,100 @@ export default function PostForm({ mode, postId }: PostFormProps) {
     setSelectedImage(null);
     setImagePreview('');
     setForm(prevForm => ({ ...prevForm, coverImage: '' }));
+  };
+
+  // Tag management functions
+  const fetchTagSuggestions = async (query: string) => {
+    try {
+      const response = await fetch(`${API_ENDPOINTS.baseUrl}/api/tags.php?q=${encodeURIComponent(query)}`);
+      const tags = await response.json();
+      setSuggestions(tags.filter((tag: string) => !form.tags.includes(tag)));
+    } catch (err) {
+      console.error('Failed to fetch tag suggestions:', err);
+    }
+  };
+
+  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setTagInput(value);
+
+    // Extract current word being typed (after last comma)
+    const words = value.split(',');
+    const currentWord = words[words.length - 1].trim();
+
+    if (currentWord.length > 0) {
+      fetchTagSuggestions(currentWord);
+      setShowSuggestions(true);
+      setSelectedSuggestionIndex(-1);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addTagsFromInput();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev =>
+        prev < suggestions.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedSuggestionIndex(prev => prev > 0 ? prev - 1 : -1);
+    } else if (e.key === 'Tab' && showSuggestions && selectedSuggestionIndex >= 0) {
+      e.preventDefault();
+      selectSuggestion(suggestions[selectedSuggestionIndex]);
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
+    }
+  };
+
+  const addTagsFromInput = () => {
+    const newTags = tagInput
+      .split(',')
+      .map(tag => tag.trim().toLowerCase())
+      .filter(tag => tag && !form.tags.includes(tag));
+
+    if (newTags.length > 0) {
+      setForm(prevForm => ({
+        ...prevForm,
+        tags: [...prevForm.tags, ...newTags]
+      }));
+    }
+
+    setTagInput('');
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+  };
+
+  const selectSuggestion = (suggestion: string) => {
+    const words = tagInput.split(',');
+    words[words.length - 1] = suggestion;
+    const newInput = words.join(', ') + ', ';
+
+    setTagInput(newInput);
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+
+    // Focus back to input
+    setTimeout(() => inputRef.current?.focus(), 0);
+  };
+
+  const handleTagInputBlur = () => {
+    if (tagInput.trim()) {
+      addTagsFromInput();
+    }
+    setTimeout(() => setShowSuggestions(false), 150); // Delay to allow clicks
+  };
+
+  const removeTag = (index: number) => {
+    setForm(prevForm => ({
+      ...prevForm,
+      tags: prevForm.tags.filter((_, i) => i !== index)
+    }));
   };
 
   const handleDelete = async () => {
@@ -403,7 +514,64 @@ export default function PostForm({ mode, postId }: PostFormProps) {
             {/* Tags */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">Tags</h3>
-              <div className="space-y-3">
+              
+              {/* Current tags display */}
+              {form.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {form.tags.map((tag, index) => (
+                    <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(index)}
+                        className="ml-1 text-blue-600 hover:text-blue-800"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              
+              {/* Tag input with autocomplete */}
+              <div className="relative">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={tagInput}
+                  onChange={handleTagInputChange}
+                  onKeyDown={handleTagInputKeyDown}
+                  onBlur={handleTagInputBlur}
+                  placeholder="Type tags separated by commas (e.g., reading, child-development)"
+                  className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                />
+                
+                {/* Autocomplete dropdown */}
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-40 overflow-y-auto">
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={suggestion}
+                        className={`px-3 py-2 cursor-pointer text-sm ${
+                          index === selectedSuggestionIndex 
+                            ? 'bg-blue-100 text-blue-900' 
+                            : 'hover:bg-gray-100'
+                        }`}
+                        onClick={() => selectSuggestion(suggestion)}
+                      >
+                        {suggestion}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              <p className="text-xs text-gray-500 mt-2">
+                Type tags separated by commas. Press Enter or Tab to autocomplete.
+              </p>
+              
+              {/* Recommended checkbox */}
+              <div className="mt-4 pt-4 border-t border-gray-200">
                 <label className="flex items-center">
                   <input
                     type="checkbox"
@@ -414,9 +582,6 @@ export default function PostForm({ mode, postId }: PostFormProps) {
                   />
                   <span className="ml-2 text-sm text-gray-700">Recommended Post</span>
                 </label>
-                <p className="text-xs text-gray-500">
-                  Recommended posts appear in the featured blogs section on the home page.
-                </p>
               </div>
             </div>
 

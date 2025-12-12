@@ -12,6 +12,7 @@ export const ADMIN_ENDPOINTS = {
 } as const;
 
 export const API_ENDPOINTS = {
+  baseUrl: ADMIN_API_BASE,
   books: `${ADMIN_API_BASE}/api/books.php`,
   posts: `${ADMIN_API_BASE}/api/posts.php`,
 } as const;

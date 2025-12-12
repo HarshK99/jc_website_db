@@ -31,7 +31,31 @@ if ($id) {
     $post = $stmt->fetch();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (!$id) {
+        echo json_encode(['success' => false, 'message' => 'Post ID required']);
+        exit;
+    }
+
+    // Fetch post with tags
+    $stmt = $pdo->prepare("
+        SELECT p.*, GROUP_CONCAT(pt.tag) as tags
+        FROM posts p
+        LEFT JOIN post_tags pt ON p.id = pt.postId
+        WHERE p.id = ?
+        GROUP BY p.id
+    ");
+    $stmt->execute([$id]);
+    $post = $stmt->fetch();
+
+    if ($post) {
+        $post['tags'] = $post['tags'] ? explode(',', $post['tags']) : [];
+        echo json_encode($post);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Post not found']);
+    }
+    exit;
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $slug = $_POST['slug'];
     $excerpt = $_POST['excerpt'];
@@ -49,13 +73,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update
             $stmt = $pdo->prepare("UPDATE posts SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=?, coverImage=?, is_recommended=? WHERE id=?");
             $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $isRecommended, $id]);
+            $postId = $id;
             echo json_encode(['success' => true, 'message' => 'Post updated successfully', 'id' => $id]);
         } else {
             // Insert
             $stmt = $pdo->prepare("INSERT INTO posts (title, slug, excerpt, content, status, publishedAt, coverImage, authorId, is_recommended) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $_SESSION['admin_id'], $isRecommended]);
-            $newId = $pdo->lastInsertId();
-            echo json_encode(['success' => true, 'message' => 'Post created successfully', 'id' => $newId]);
+            $postId = $pdo->lastInsertId();
+            echo json_encode(['success' => true, 'message' => 'Post created successfully', 'id' => $postId]);
+        }
+
+        // Handle tags
+        if (isset($postId)) {
+            // Delete existing tags
+            $pdo->prepare("DELETE FROM post_tags WHERE postId = ?")->execute([$postId]);
+
+            // Insert new tags if provided
+            if (isset($_POST['tags']) && is_array($_POST['tags'])) {
+                $tagStmt = $pdo->prepare("INSERT INTO post_tags (postId, tag) VALUES (?, ?)");
+                foreach ($_POST['tags'] as $tag) {
+                    $tag = trim($tag);
+                    if (!empty($tag)) {
+                        $tagStmt->execute([$postId, $tag]);
+                    }
+                }
+            }
         }
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
