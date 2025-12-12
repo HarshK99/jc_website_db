@@ -5,10 +5,10 @@
 $isProduction = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'hostingersite.com') !== false;
 
 // Define base URL for the application
-$baseUrl = $isProduction ? 'https://yourdomain.com' : 'http://localhost:8080/jc_backend';
+$baseUrl = $isProduction ? 'https://slateblue-cheetah-410739.hostingersite.com/backend' : 'http://localhost:8080/jc_backend';
 
 // Define base URL for uploads (served directly from web root)
-$uploadBaseUrl = $isProduction ? 'https://yourdomain.com' : 'http://localhost:8080';
+$uploadBaseUrl = $isProduction ? 'https://slateblue-cheetah-410739.hostingersite.com' : 'http://localhost:8080';
 
 if ($isProduction) {
     // Production configuration (Hostinger)
