@@ -72,12 +72,6 @@ CREATE TABLE categories (
     slug VARCHAR(255) UNIQUE NOT NULL
 );
 
--- Tags table
-CREATE TABLE tags (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL,
-    slug VARCHAR(100) UNIQUE NOT NULL
-);
 
 -- Insert sample data
 INSERT INTO authors (name, bio) VALUES
@@ -99,14 +93,6 @@ INSERT INTO post_tags (postId, tag) VALUES
 (2, 'visual-learning'), (2, 'child-development'), (2, 'literacy'),
 (3, 'emotional-intelligence'), (3, 'child-development'), (3, 'empathy');
 
-INSERT INTO tags (name, slug) VALUES
-('reading', 'reading'),
-('child-development', 'child-development'),
-('storytelling', 'storytelling'),
-('visual-learning', 'visual-learning'),
-('literacy', 'literacy'),
-('emotional-intelligence', 'emotional-intelligence'),
-('empathy', 'empathy');
 
 INSERT INTO admin_users (name, email, password, role) VALUES
 ('J & C Owner', 'admin@jc.com', '$2y$10$ENfVclRG7h7QobKrJTvpr.KjkRV9s7KjAYvaf03AbOB6e.s3ze5N2', 'owner'); -- Use password_hash() in PHP for real password
