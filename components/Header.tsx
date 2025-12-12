@@ -7,7 +7,7 @@ import Logo from './Header/Logo';
 import Search from './Search';
 
 export default function Header() {
-  const isScrolled = useScrollPosition(120);
+  const isScrolled = useScrollPosition(150);
   const isMobile = useIsMobile();
 
   const showUtilityBar = !isMobile && !isScrolled;
@@ -25,7 +25,7 @@ export default function Header() {
     <header>
       {showUtilityBar && (
         <div className="bg-gray-50 border-b border-gray-200 hidden sm:block">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-3 items-center text-sm text-gray-600">
               <div className="flex items-center space-x-4">
                 <Logo size="large" />
@@ -48,7 +48,7 @@ export default function Header() {
       
     </header>
     {isScrolled && (
-    <header className='sticky top-0 z-50 compact-header'>
+    <header className='sticky top-0 z-50 compact-header ease-in duration-400'>
      
         <NavBar
           variant="light"

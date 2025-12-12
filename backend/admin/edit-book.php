@@ -31,6 +31,16 @@ if ($id) {
     $book = $stmt->fetch();
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $id) {
+    if ($book) {
+        echo json_encode($book);
+    } else {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Book not found']);
+    }
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $slug = $_POST['slug'];

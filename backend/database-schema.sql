@@ -1,4 +1,4 @@
--- Database schema for J & C Group website
+-- Database schema for JnC Group website
 -- Run this in phpMyAdmin to create the tables
 
 -- Books table
@@ -80,8 +80,8 @@ CREATE TABLE tags (
 );
 
 -- Insert sample data
-INSERT INTO authors (name, bio, avatar) VALUES
-('J&C Editorial', 'The core editorial voice guiding every title at J & C.', '/uploads/authors/jc.png');
+INSERT INTO authors (name, bio) VALUES
+('JnC News Editorial', 'The core editorial voice guiding every title at J & C.');
 
 INSERT INTO books (title, slug, shortDescription, description, ageGroup, coverImage, buyLink, publishedYear, pages, isbn, author, category, price) VALUES
 ('Under the Banyan Tree', 'under-the-banyan-tree', 'A gentle, poetic journey beneath a wise old tree.', '<p>The banyan tree watches generations grow...</p>', '6–9 years', '/uploads/books/banyan.jpg', 'https://amazon.in/banyan', 2024, 42, '9788123456789', 'Dr. A.P.J. Abdul Kalam', 'Fiction', 299.00),
@@ -109,4 +109,4 @@ INSERT INTO tags (name, slug) VALUES
 ('empathy', 'empathy');
 
 INSERT INTO admin_users (name, email, password, role) VALUES
-('J & C Owner', 'admin@jc.com', '$2y$10$examplehashedpassword', 'owner'); -- Use password_hash() in PHP for real password
+('J & C Owner', 'admin@jc.com', '$2y$10$ENfVclRG7h7QobKrJTvpr.KjkRV9s7KjAYvaf03AbOB6e.s3ze5N2', 'owner'); -- Use password_hash() in PHP for real password

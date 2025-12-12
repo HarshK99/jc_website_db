@@ -1,6 +1,6 @@
 {
   "meta": {
-    "brand": "J & C Group",
+    "brand": "JnC Group",
     "tagline": "Come to the point, go to the root"
   },
   "posts": [
@@ -15,7 +15,7 @@
       "publishedAt": "2025-12-01T10:00:00Z",
       "updatedAt": "2025-12-01T10:00:00Z",
       "authorId": 1,
-      "authorName": "J&C Editorial",
+      "authorName": "JnC News Editorial",
       "authorAvatar": "/uploads/authors/jc.png",
       "tags": ["reading", "child-development", "storytelling"]
     },
@@ -30,7 +30,7 @@
       "publishedAt": "2025-11-28T09:30:00Z",
       "updatedAt": "2025-11-28T09:30:00Z",
       "authorId": 1,
-      "authorName": "J&C Editorial",
+      "authorName": "JnC News Editorial",
       "authorAvatar": "/uploads/authors/jc.png",
       "tags": ["visual-learning", "child-development", "literacy"]
     },
@@ -45,7 +45,7 @@
       "publishedAt": "2025-11-25T14:15:00Z",
       "updatedAt": "2025-11-25T14:15:00Z",
       "authorId": 1,
-      "authorName": "J&C Editorial",
+      "authorName": "JnC News Editorial",
       "authorAvatar": "/uploads/authors/jc.png",
       "tags": ["emotional-intelligence", "child-development", "empathy"]
     }
@@ -79,7 +79,7 @@
   "authors": [
     {
       "id": 1,
-      "name": "J&C Editorial",
+      "name": "JnC News Editorial",
       "bio": "The core editorial voice guiding every title at J & C.",
       "avatar": "/uploads/authors/jc.png"
     }

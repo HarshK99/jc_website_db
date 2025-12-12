@@ -17,8 +17,8 @@ const crimsonText = Crimson_Text({
 });
 
 export const metadata: Metadata = {
-  title: "J & C Group - News Channel and Books Publisher",
-  description: "Come to the point, go to the root. Publishing stories that inspire young minds.",
+  title: "JnC Group - News Channel and Books Publisher",
+  description: "Come to the point, go to the root. Publishing books that inspire young minds.",
 };
 
 export default function RootLayout({

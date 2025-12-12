@@ -1,6 +1,6 @@
-# J & C Group Publishing Website
+# JnC Group Publishing Website
 
-A modern, responsive website for J & C Group publishing company built with Next.js (frontend) and PHP/MySQL (backend).
+A modern, responsive website for JnC Group publishing company built with Next.js (frontend) and PHP/MySQL (backend).
 
 ## Features
 
