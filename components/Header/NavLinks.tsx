@@ -9,6 +9,7 @@ const links = [
   { href: '/', label: 'HOME' },
   { href: '/books', label: 'BOOKS' },
   { href: '/blog', label: 'BLOGS' },
+  { href: '/news', label: 'NEWS' },
 ];
 
 export default function NavLinks({ variant = 'light', className = '' }: NavLinksProps) {

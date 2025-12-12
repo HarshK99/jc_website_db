@@ -65,6 +65,9 @@ export default function AdminLayout({
                 <Link href="/admin/posts/add" className="text-gray-700 hover:text-gray-900">
                   Add Post
                 </Link>
+                <Link href="/admin/news/add" className="text-gray-700 hover:text-gray-900">
+                  Add News
+                </Link>
               </nav>
             </div>
             <button

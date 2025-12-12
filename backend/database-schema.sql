@@ -65,11 +65,28 @@ CREATE TABLE admin_users (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Categories table
-CREATE TABLE categories (
+-- News table (similar to posts but for news)
+CREATE TABLE news (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) UNIQUE NOT NULL
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    excerpt TEXT,
+    content LONGTEXT,
+    coverImage VARCHAR(255),
+    status ENUM('draft', 'published') DEFAULT 'draft',
+    publishedAt TIMESTAMP NULL,
+    is_recommended BOOLEAN DEFAULT FALSE,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    authorId INT,
+    FOREIGN KEY (authorId) REFERENCES authors(id)
+);
+
+-- News tags (many-to-many)
+CREATE TABLE news_tags (
+    newsId INT,
+    tag VARCHAR(100),
+    PRIMARY KEY (newsId, tag),
+    FOREIGN KEY (newsId) REFERENCES news(id) ON DELETE CASCADE
 );
 
 
@@ -88,10 +105,22 @@ INSERT INTO posts (title, slug, excerpt, content, coverImage, status, publishedA
 
 ('Building Emotional Intelligence Through Literature', 'building-emotional-intelligence', 'Children\'s books that explore emotions help develop empathy and self-awareness.', '<p>Emotional intelligence is one of the most important skills we can teach children. Quality children\'s literature provides safe spaces for exploring complex emotions and social situations.</p><p>Through stories, children learn to identify, understand, and manage their own emotions while developing empathy for others. Books that tackle themes like friendship, loss, courage, and kindness provide valuable lessons that stick with children throughout their lives.</p><h3>Choosing Books for Emotional Development</h3><p>When selecting books for emotional development, look for stories that: present authentic emotions, model healthy coping strategies, show diverse perspectives, and encourage discussion about feelings.</p>', '/uploads/blog/emotional-intelligence.jpg', 'published', '2025-11-25 14:15:00', 1);
 
+INSERT INTO news (title, slug, excerpt, content, coverImage, status, publishedAt, authorId) VALUES
+('J & C Group Launches New Educational Initiative', 'jc-group-launches-educational-initiative', 'A groundbreaking program to bring quality education to underserved communities.', '<p>J & C Group today announced the launch of their new educational initiative, "Books for All," aimed at providing quality children\'s literature to schools in underserved communities across India.</p><p>The program will distribute over 50,000 books to more than 200 schools in rural areas, focusing on age-appropriate content that promotes critical thinking, emotional intelligence, and cultural awareness.</p><h3>Program Details</h3><p>"Books for All" will include specially curated collections of children\'s books, teacher training workshops, and ongoing support for school libraries. The initiative is expected to benefit over 100,000 students in its first year.</p>', '/uploads/news/educational-initiative.jpg', 'published', '2025-12-10 08:00:00', 1),
+
+('Award-Winning Author Joins J & C Family', 'award-winning-author-joins-jc-family', 'Celebrated children\'s author Dr. Maya Sharma becomes the latest addition to our publishing family.', '<p>We are thrilled to announce that Dr. Maya Sharma, recipient of the prestigious Children\'s Literature Prize, has joined J & C Group as a featured author.</p><p>Dr. Sharma\'s work focuses on stories that bridge cultural divides and promote understanding among young readers. Her upcoming title, "Bridges of Friendship," is scheduled for release next spring.</p><h3>Author Background</h3><p>With over 15 years of experience in children\'s literature, Dr. Sharma brings a wealth of knowledge and creativity to our team. Her books have been translated into 12 languages and have won numerous international awards.</p>', '/uploads/news/new-author.jpg', 'published', '2025-12-08 10:30:00', 1),
+
+('Digital Learning Platform Goes Live', 'digital-learning-platform-launches', 'J & C Group introduces interactive digital learning tools to complement traditional reading.', '<p>J & C Group has launched its new digital learning platform, designed to enhance the reading experience for children through interactive multimedia content.</p><p>The platform includes animated story adaptations, vocabulary games, and discussion guides that teachers can use to create engaging classroom experiences.</p><h3>Platform Features</h3><p>Available features include: interactive story maps, character voice-overs, comprehension quizzes, and printable activity sheets. The platform is accessible on tablets, computers, and smartboards.</p>', '/uploads/news/digital-platform.jpg', 'published', '2025-12-05 14:00:00', 1);
+
 INSERT INTO post_tags (postId, tag) VALUES
 (1, 'reading'), (1, 'child-development'), (1, 'storytelling'),
 (2, 'visual-learning'), (2, 'child-development'), (2, 'literacy'),
 (3, 'emotional-intelligence'), (3, 'child-development'), (3, 'empathy');
+
+INSERT INTO news_tags (newsId, tag) VALUES
+(1, 'education'), (1, 'community'), (1, 'initiative'),
+(2, 'authors'), (2, 'publishing'), (2, 'literature'),
+(3, 'technology'), (3, 'digital-learning'), (3, 'education');
 
 
 INSERT INTO admin_users (name, email, password, role) VALUES

@@ -87,6 +87,63 @@ export async function fetchPostBySlug(slug: string): Promise<Post | null> {
   }
 }
 
+export async function fetchNews(limit?: number): Promise<Post[]> {
+  try {
+    const url = new URL(`${API_BASE_URL}/api/news.php`);
+    if (limit) {
+      url.searchParams.set('limit', limit.toString());
+    }
+    console.log('Attempting to fetch news from:', url.toString());
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      throw new Error('Failed to fetch news');
+    }
+    const data = await response.json();
+    console.log('Fetched news from API:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching news:', error);
+    // Return empty array instead of sample data
+    return [];
+  }
+}
+
+export async function fetchRecommendedNews(): Promise<Post[]> {
+  try {
+    console.log('Attempting to fetch recommended news from:', `${API_BASE_URL}/api/news.php?recommended=1`);
+    const response = await fetch(`${API_BASE_URL}/api/news.php?recommended=1`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch recommended news');
+    }
+    const data = await response.json();
+    console.log('Fetched recommended news from API:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching recommended news:', error);
+    // Return empty array instead of sample data
+    return [];
+  }
+}
+
+export async function fetchNewsBySlug(slug: string): Promise<Post | null> {
+  try {
+    const url = new URL(`${API_BASE_URL}/api/news.php`);
+    url.searchParams.set('slug', slug);
+    console.log('Attempting to fetch news from:', url.toString());
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      throw new Error('Failed to fetch news');
+    }
+    const data = await response.json();
+    console.log('Fetched news from API:', data);
+    return data.length > 0 ? data[0] : null;
+  } catch (error) {
+    console.error('Error fetching news:', error);
+    // Return null instead of sample data
+    return null;
+  }
+}
+
 export async function fetchFeaturedBooks(): Promise<Book[]> {
   try {
     console.log('Attempting to fetch featured books from:', `${API_BASE_URL}/api/books.php?featured=1`);

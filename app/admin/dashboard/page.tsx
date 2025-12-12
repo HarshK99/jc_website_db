@@ -21,9 +21,18 @@ interface Book {
   is_featured: boolean;
 }
 
+interface News {
+  id: number;
+  title: string;
+  slug: string;
+  status: string;
+  publishedAt: string;
+}
+
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [books, setBooks] = useState<Book[]>([]);
+  const [news, setNews] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -60,10 +69,20 @@ export default function AdminDashboard() {
       } else {
         setBooks([]);
       }
+
+      // Fetch news
+      const newsResponse = await fetch(API_ENDPOINTS.news);
+      const newsData = await newsResponse.json();
+      if (Array.isArray(newsData)) {
+        setNews(newsData);
+      } else {
+        setNews([]);
+      }
     } catch (err) {
       console.error('Failed to fetch data:', err);
       setPosts([]);
       setBooks([]);
+      setNews([]);
     } finally {
       setLoading(false);
     }
@@ -105,6 +124,44 @@ export default function AdminDashboard() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.publishedAt}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link href={`/admin/posts/edit?id=${post.id}`} className="text-blue-600 hover:text-blue-900">Edit</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* News Section */}
+      <div className="mb-12">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">News</h2>
+          <Link href="/admin/news/add" className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Add New News</Link>
+        </div>
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Published</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {Array.isArray(news) && news.map((newsItem) => (
+                <tr key={newsItem.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{newsItem.title}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      newsItem.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {newsItem.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{newsItem.publishedAt}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Link href={`/admin/news/edit?id=${newsItem.id}`} className="text-blue-600 hover:text-blue-900">Edit</Link>
                   </td>
                 </tr>
               ))}
