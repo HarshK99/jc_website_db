@@ -12,7 +12,7 @@ export default function BookCard({ book }: BookCardProps) {
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
-      <div className="relative aspect-[3/4] bg-gray-200">
+      <div className="relative aspect-[2/3] bg-gray-200">
         {!imageError ? (
           <Image
             src={book.coverImage}

@@ -14,7 +14,7 @@ const links = [
 export default function NavLinks({ variant = 'light', className = '' }: NavLinksProps) {
   const baseClasses = 'text-bold transition-colors duration-200';
   const lightClasses = 'text-gray-700 hover:text-primary-dark';
-  const darkClasses = 'text-white hover:text-primary';
+  const darkClasses = 'text-white hover:text-primary-dark';
 
   const linkClasses = variant === 'dark' ? darkClasses : lightClasses;
 

@@ -16,7 +16,7 @@ export default function NavBar({ variant = 'light', isSticky = false, showLogo =
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const bgClass = variant === 'dark' ? 'bg-black' : 'bg-white';
+  const bgClass = variant === 'dark' ? 'bg-primary' : 'bg-white';
   const backdropClass = isSticky ? 'backdrop-blur-md' : '';
   const shadowClass = isSticky ? 'shadow-lg' : 'shadow-sm';
   const positionClass = isSticky ? 'sticky top-0 z-50' : '';
