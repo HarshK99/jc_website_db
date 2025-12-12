@@ -18,7 +18,7 @@ const crimsonText = Crimson_Text({
 
 export const metadata: Metadata = {
   title: "JnC Group - News Channel and Books Publisher",
-  description: "Come to the point, go to the root. Publishing books that inspire young minds.",
+  description: "Come to the point. Go to the root. Publishing books that inspire young minds.",
 };
 
 export default function RootLayout({

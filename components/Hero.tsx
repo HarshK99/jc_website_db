@@ -8,7 +8,7 @@ export default function Hero() {
             JnC Group
           </h1>
           <p className="text-xl md:text-2xl mb-8">
-            Come to the point, go to the root
+            Come to the point. Go to the root
           </p>
           <p className="text-lg md:text-xl max-w-3xl mx-auto">
             Publishing books that inspire young minds and foster deep thinking.
