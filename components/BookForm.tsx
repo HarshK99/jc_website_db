@@ -14,6 +14,10 @@ interface BookFormData {
   buyLink: string;
   publishedYear: string;
   pages: string;
+  isbn: string;
+  author: string;
+  category: string;
+  price: string;
   is_featured: boolean;
 }
 
@@ -33,6 +37,10 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
     buyLink: '',
     publishedYear: '',
     pages: '',
+    isbn: '',
+    author: '',
+    category: '',
+    price: '',
     is_featured: false,
   });
   const [loading, setLoading] = useState(false);
@@ -75,6 +83,10 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
           buyLink: bookData.buyLink || '',
           publishedYear: bookData.publishedYear?.toString() || '',
           pages: bookData.pages?.toString() || '',
+          isbn: bookData.isbn || '',
+          author: bookData.author || '',
+          category: bookData.category || '',
+          price: bookData.price?.toString() || '',
           is_featured: bookData.is_featured || false,
         });
         if (bookData.coverImage) {
@@ -163,6 +175,7 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
         coverImage: imageUrl || form.coverImage,
         publishedYear: form.publishedYear ? parseInt(form.publishedYear) : '',
         pages: form.pages ? parseInt(form.pages) : '',
+        price: form.price ? parseFloat(form.price) : '',
       };
 
       const url = mode === 'edit' && bookId
@@ -309,6 +322,60 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
             onChange={handleInputChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="https://..."
+          />
+        </div>
+
+        {/* ISBN */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">ISBN</label>
+          <input
+            type="text"
+            name="isbn"
+            value={form.isbn}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="9788123456789"
+          />
+        </div>
+
+        {/* Author */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Author</label>
+          <input
+            type="text"
+            name="author"
+            value={form.author}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Author name"
+          />
+        </div>
+
+        {/* Category */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+          <input
+            type="text"
+            name="category"
+            value={form.category}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Fiction, Adventure, etc."
+          />
+        </div>
+
+        {/* Price */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+          <input
+            type="number"
+            name="price"
+            value={form.price}
+            onChange={handleInputChange}
+            min="0"
+            step="0.01"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="299.00"
           />
         </div>
 

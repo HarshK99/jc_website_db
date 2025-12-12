@@ -15,16 +15,54 @@ try {
     require_once '../includes/functions.php';
     require_once '../config/db.php';
 
-    // Check if featured parameter is set
-    $featured = isset($_GET['featured']) && $_GET['featured'] == '1';
+    // Build query with optional filters
+    $whereConditions = [];
+    $params = [];
 
-    // Fetch books
-    if ($featured) {
-        $stmt = $pdo->query("SELECT * FROM books WHERE is_featured = 1 ORDER BY publishedYear DESC");
-    } else {
-        $stmt = $pdo->query("SELECT * FROM books ORDER BY publishedYear DESC");
+    // Check if featured parameter is set
+    if (isset($_GET['featured']) && $_GET['featured'] == '1') {
+        $whereConditions[] = "is_featured = 1";
     }
 
+    // Search parameter for general search across multiple fields
+    if (isset($_GET['search']) && !empty($_GET['search'])) {
+        $searchTerm = '%' . $_GET['search'] . '%';
+        $whereConditions[] = "(title LIKE ? OR author LIKE ? OR category LIKE ? OR shortDescription LIKE ? OR isbn LIKE ?)";
+        $params = array_merge($params, [$searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm]);
+    }
+
+    // Individual filters
+    if (isset($_GET['author']) && !empty($_GET['author'])) {
+        $whereConditions[] = "author LIKE ?";
+        $params[] = '%' . $_GET['author'] . '%';
+    }
+
+    if (isset($_GET['category']) && !empty($_GET['category'])) {
+        $whereConditions[] = "category LIKE ?";
+        $params[] = '%' . $_GET['category'] . '%';
+    }
+
+    if (isset($_GET['isbn']) && !empty($_GET['isbn'])) {
+        $whereConditions[] = "isbn LIKE ?";
+        $params[] = '%' . $_GET['isbn'] . '%';
+    }
+
+    if (isset($_GET['min_price']) && is_numeric($_GET['min_price'])) {
+        $whereConditions[] = "price >= ?";
+        $params[] = (float)$_GET['min_price'];
+    }
+
+    if (isset($_GET['max_price']) && is_numeric($_GET['max_price'])) {
+        $whereConditions[] = "price <= ?";
+        $params[] = (float)$_GET['max_price'];
+    }
+
+    // Build the WHERE clause
+    $whereClause = !empty($whereConditions) ? "WHERE " . implode(" AND ", $whereConditions) : "";
+
+    // Fetch books
+    $stmt = $pdo->prepare("SELECT * FROM books $whereClause ORDER BY publishedYear DESC");
+    $stmt->execute($params);
     $books = $stmt->fetchAll();
 
     // Return books as JSON

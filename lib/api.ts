@@ -6,10 +6,17 @@ const API_BASE_URL = isDevelopment
   ? 'http://localhost:8080/jc_backend'
   : (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080');
 
-export async function fetchBooks(): Promise<Book[]> {
+export async function fetchBooks(searchParams?: URLSearchParams): Promise<Book[]> {
   try {
-    console.log('Attempting to fetch from:', `${API_BASE_URL}/api/books.php`);
-    const response = await fetch(`${API_BASE_URL}/api/books.php`);
+    const url = new URL(`${API_BASE_URL}/api/books.php`);
+    if (searchParams) {
+      // Copy all search params to the URL
+      for (const [key, value] of searchParams) {
+        url.searchParams.set(key, value);
+      }
+    }
+    console.log('Attempting to fetch from:', url.toString());
+    const response = await fetch(url.toString());
     if (!response.ok) {
       throw new Error('Failed to fetch books');
     }

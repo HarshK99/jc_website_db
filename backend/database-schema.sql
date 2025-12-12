@@ -13,6 +13,10 @@ CREATE TABLE books (
     buyLink VARCHAR(255),
     publishedYear INT,
     pages INT,
+    isbn VARCHAR(20),
+    author VARCHAR(255),
+    category VARCHAR(100),
+    price DECIMAL(10,2),
     is_featured BOOLEAN DEFAULT FALSE,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -79,9 +83,9 @@ CREATE TABLE tags (
 INSERT INTO authors (name, bio, avatar) VALUES
 ('J&C Editorial', 'The core editorial voice guiding every title at J & C.', '/uploads/authors/jc.png');
 
-INSERT INTO books (title, slug, shortDescription, description, ageGroup, coverImage, buyLink, publishedYear, pages) VALUES
-('Under the Banyan Tree', 'under-the-banyan-tree', 'A gentle, poetic journey beneath a wise old tree.', '<p>The banyan tree watches generations grow...</p>', '6–9 years', '/uploads/books/banyan.jpg', 'https://amazon.in/banyan', 2024, 42),
-('Clouds With Secrets', 'clouds-with-secrets', 'A whimsical chase through shifting skies.', '<p>Clouds hold more than rain...</p>', '5–8 years', '/uploads/books/clouds.jpg', 'https://amazon.in/clouds', 2023, 38);
+INSERT INTO books (title, slug, shortDescription, description, ageGroup, coverImage, buyLink, publishedYear, pages, isbn, author, category, price) VALUES
+('Under the Banyan Tree', 'under-the-banyan-tree', 'A gentle, poetic journey beneath a wise old tree.', '<p>The banyan tree watches generations grow...</p>', '6–9 years', '/uploads/books/banyan.jpg', 'https://amazon.in/banyan', 2024, 42, '9788123456789', 'Dr. A.P.J. Abdul Kalam', 'Fiction', 299.00),
+('Clouds With Secrets', 'clouds-with-secrets', 'A whimsical chase through shifting skies.', '<p>Clouds hold more than rain...</p>', '5–8 years', '/uploads/books/clouds.jpg', 'https://amazon.in/clouds', 2023, 38, '9788987654321', 'Maya Angelou', 'Adventure', 249.00);
 
 INSERT INTO posts (title, slug, excerpt, content, coverImage, status, publishedAt, authorId) VALUES
 ('How Stories Build Thinking', 'how-stories-build-thinking', 'The right stories help children form deeper reasoning, empathy, and imagery.', '<p>Stories are not just entertainment—they are powerful tools for cognitive development. When children engage with well-crafted narratives, they learn to think critically, understand different perspectives, and build emotional intelligence.</p><p>Research shows that regular exposure to quality children\'s literature can significantly improve language skills, concentration, and even academic performance. The key is choosing stories that challenge young minds while remaining age-appropriate.</p><h3>The Science Behind Story-Based Learning</h3><p>Neuroscientists have discovered that stories activate multiple areas of the brain simultaneously. This multi-modal engagement creates stronger neural connections and improves memory retention compared to traditional learning methods.</p>', '/uploads/blog/stories-thinking.jpg', 'published', '2025-12-01 10:00:00', 1),

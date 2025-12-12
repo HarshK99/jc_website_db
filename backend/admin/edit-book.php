@@ -41,18 +41,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $buyLink = $_POST['buyLink'] ?? '';
     $publishedYear = $_POST['publishedYear'] ? (int)$_POST['publishedYear'] : null;
     $pages = $_POST['pages'] ? (int)$_POST['pages'] : null;
+    $isbn = $_POST['isbn'] ?? '';
+    $author = $_POST['author'] ?? '';
+    $category = $_POST['category'] ?? '';
+    $price = $_POST['price'] ? (float)$_POST['price'] : null;
     $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
 
     try {
         if ($id) {
             // Update
-            $stmt = $pdo->prepare("UPDATE books SET title=?, slug=?, shortDescription=?, description=?, ageGroup=?, coverImage=?, buyLink=?, publishedYear=?, pages=?, is_featured=? WHERE id=?");
-            $stmt->execute([$title, $slug, $shortDescription, $description, $ageGroup, $coverImage, $buyLink, $publishedYear, $pages, $isFeatured, $id]);
+            $stmt = $pdo->prepare("UPDATE books SET title=?, slug=?, shortDescription=?, description=?, ageGroup=?, coverImage=?, buyLink=?, publishedYear=?, pages=?, isbn=?, author=?, category=?, price=?, is_featured=? WHERE id=?");
+            $stmt->execute([$title, $slug, $shortDescription, $description, $ageGroup, $coverImage, $buyLink, $publishedYear, $pages, $isbn, $author, $category, $price, $isFeatured, $id]);
             echo json_encode(['success' => true, 'message' => 'Book updated successfully', 'id' => $id]);
         } else {
             // Insert
-            $stmt = $pdo->prepare("INSERT INTO books (title, slug, shortDescription, description, ageGroup, coverImage, buyLink, publishedYear, pages, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $slug, $shortDescription, $description, $ageGroup, $coverImage, $buyLink, $publishedYear, $pages, $isFeatured]);
+            $stmt = $pdo->prepare("INSERT INTO books (title, slug, shortDescription, description, ageGroup, coverImage, buyLink, publishedYear, pages, isbn, author, category, price, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $shortDescription, $description, $ageGroup, $coverImage, $buyLink, $publishedYear, $pages, $isbn, $author, $category, $price, $isFeatured]);
             $newId = $pdo->lastInsertId();
             echo json_encode(['success' => true, 'message' => 'Book created successfully', 'id' => $newId]);
         }
@@ -90,6 +94,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="buyLink" value="<?php echo htmlspecialchars($book['buyLink'] ?? ''); ?>" placeholder="Buy Link">
         <input type="number" name="publishedYear" value="<?php echo $book['publishedYear'] ?? ''; ?>" placeholder="Published Year">
         <input type="number" name="pages" value="<?php echo $book['pages'] ?? ''; ?>" placeholder="Pages">
+        <input type="text" name="isbn" value="<?php echo htmlspecialchars($book['isbn'] ?? ''); ?>" placeholder="ISBN">
+        <input type="text" name="author" value="<?php echo htmlspecialchars($book['author'] ?? ''); ?>" placeholder="Author">
+        <input type="text" name="category" value="<?php echo htmlspecialchars($book['category'] ?? ''); ?>" placeholder="Category">
+        <input type="number" name="price" value="<?php echo $book['price'] ?? ''; ?>" placeholder="Price" step="0.01">
         <label><input type="checkbox" name="is_featured" <?php echo ($book['is_featured'] ?? 0) ? 'checked' : ''; ?>> Featured</label>
         <button type="submit"><?php echo $id ? 'Update' : 'Create'; ?> Book</button>
     </form>

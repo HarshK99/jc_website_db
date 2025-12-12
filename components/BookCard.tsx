@@ -40,12 +40,15 @@ export default function BookCard({ book }: BookCardProps) {
           <p className="text-sm mb-4 text-center line-clamp-3">
             {book.shortDescription}
           </p>
-          <div className="flex justify-between items-center w-full text-xs mb-4">
+          <div className="flex justify-between items-center w-full text-xs mb-2">
             <span>{book.ageGroup}</span>
             <span>{book.publishedYear}</span>
           </div>
+          <div className="text-xs mb-2">
+            By {book.author}
+          </div>
           <div className="text-xs mb-4">
-            {book.pages} pages
+            {book.pages} pages • ₹{book.price}
           </div>
           {/* <Link
             href={book.buyLink}

@@ -38,6 +38,10 @@ export interface Book {
   buyLink: string;
   publishedYear: number;
   pages: number;
+  isbn: string;
+  author: string;
+  category: string;
+  price: number;
   is_featured: boolean;
 }
 
