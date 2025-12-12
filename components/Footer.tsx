@@ -34,7 +34,7 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact</h4>
             <p className="text-gray-400">
-              Email: info@jcgroup.com
+              Email: jncnewdelhi@gmail.com
             </p>
           </div>
         </div>

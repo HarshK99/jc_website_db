@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ADMIN_ENDPOINTS, API_ENDPOINTS } from '../lib/admin-config';
+import { ADMIN_ENDPOINTS } from '../lib/admin-config';
 
 interface NewsFormData {
   title: string;
@@ -35,7 +35,6 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
   const [loadingType, setLoadingType] = useState<'draft' | 'published' | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const router = useRouter();
 
@@ -104,26 +103,13 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
     }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedImage(file);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const uploadImage = async (): Promise<string | null> => {
     if (!selectedImage) return form.coverImage;
 
-    setUploadingImage(true);
-    const formData = new FormData();
-    formData.append('image', selectedImage);
-
     try {
+      const formData = new FormData();
+      formData.append('image', selectedImage);
+
       const response = await fetch(ADMIN_ENDPOINTS.uploadImage, {
         method: 'POST',
         body: formData,
@@ -141,8 +127,6 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
       console.error('Image upload error:', error);
       alert('Failed to upload image');
       return null;
-    } finally {
-      setUploadingImage(false);
     }
   };
 
@@ -156,13 +140,6 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
 
   const handleTagRemove = (tagToRemove: string) => {
     setForm(prev => ({ ...prev, tags: prev.tags.filter(tag => tag !== tagToRemove) }));
-  };
-
-  const handleTagInputKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleTagAdd();
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent, submitType: 'draft' | 'published' = 'published') => {
@@ -228,216 +205,311 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
     }
   };
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreview('');
+    setForm(prev => ({ ...prev, coverImage: '' }));
+  };
+
+  const handleDelete = async () => {
+    if (!newsId || !confirm('Are you sure you want to delete this news article? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${ADMIN_ENDPOINTS.editNews}?id=${newsId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        router.push('/admin/dashboard');
+      } else {
+        alert('Failed to delete news article');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('Failed to delete news article');
+    }
+  };
+
+  const pageTitle = mode === 'edit' ? 'Edit News Analysis' : 'Add New News Analysis';
+  const publishButtonText = mode === 'edit'
+    ? (form.status === 'published' ? 'Update' : 'Publish')
+    : 'Publish';
+
+  // Determine which buttons to show
+  const showSaveDraftButton = mode === 'add' || (mode === 'edit' && form.status === 'draft');
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
-          {mode === 'edit' ? 'Edit News Article' : 'Add New News Article'}
-        </h1>
-        <p className="text-gray-600 mt-2">
-          {mode === 'edit' ? 'Update the news article details below.' : 'Fill in the details to create a new news article.'}
-        </p>
-      </div>
-
-      <form onSubmit={(e) => handleSubmit(e)} className="space-y-6">
-        {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Title <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter news title"
-          />
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">{pageTitle}</h1>
+          <div className="flex space-x-3">
+            {showSaveDraftButton && (
+              <button
+                type="button"
+                onClick={(e) => handleSubmit(e, 'draft')}
+                disabled={loading}
+                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50"
+              >
+                {loadingType === 'draft' ? 'Saving...' : 'Save Draft'}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={(e) => handleSubmit(e, 'published')}
+              disabled={loading}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50"
+            >
+              {publishButtonText}
+            </button>
+          </div>
         </div>
 
-        {/* Slug */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Slug <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            name="slug"
-            value={form.slug}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="news-slug-url"
-          />
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content Column */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Title */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <input
+                type="text"
+                name="title"
+                value={form.title}
+                onChange={handleInputChange}
+                placeholder="Add title"
+                className="w-full text-2xl font-bold border-none outline-none p-0 placeholder-gray-400"
+                required
+              />
+            </div>
 
-        {/* Excerpt */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Excerpt <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            name="excerpt"
-            value={form.excerpt}
-            onChange={handleInputChange}
-            rows={3}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Brief summary of the news article"
-          />
-        </div>
+            {/* Content */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <textarea
+                name="content"
+                value={form.content}
+                onChange={handleInputChange}
+                placeholder="Write your news article content here..."
+                rows={20}
+                className="w-full border-none outline-none p-0 resize-none"
+              />
+            </div>
+          </div>
 
-        {/* Content */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Content <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            name="content"
-            value={form.content}
-            onChange={handleInputChange}
-            rows={15}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Full news article content (HTML allowed)"
-          />
-        </div>
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Publish Panel - Show in both modes but with different content */}
+            {mode === 'edit' && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold mb-4">Status</h3>
 
-        {/* Cover Image */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image</label>
-          <div className="space-y-4">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <input
-              type="text"
-              name="coverImage"
-              value={form.coverImage}
-              onChange={handleInputChange}
-              placeholder="Or enter image URL"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            {imagePreview && (
-              <div className="mt-4">
-                <img src={imagePreview} alt="Cover preview" className="w-32 h-48 object-cover rounded-lg shadow-md" />
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-600">Current status:</span>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      form.status === 'published'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {form.status === 'published' ? 'Published' : 'Draft'}
+                    </span>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Publish Date</label>
+                    <input
+                      type="datetime-local"
+                      name="publishedAt"
+                      value={form.publishedAt}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Featured Image */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-4">Featured Image</h3>
+
+              {imagePreview ? (
+                // Image preview with controls
+                <div className="space-y-4">
+                  <div className="relative">
+                    <img
+                      src={imagePreview.startsWith('data:') ? imagePreview : imagePreview}
+                      alt="Featured image preview"
+                      className="w-full h-48 object-cover rounded-lg border border-gray-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full text-sm"
+                      title="Remove image"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {form.coverImage && (
+                    <p className="text-xs text-green-600">✓ Image uploaded successfully</p>
+                  )}
+                </div>
+              ) : (
+                // Upload area
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <div className="text-gray-500 mb-2">
+                    <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-4">Select Featured Image</p>
+
+                  <div className="space-y-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label
+                      htmlFor="image-upload"
+                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
+                    >
+                      Choose Image
+                    </label>
+                    <p className="text-xs text-gray-500">Supported formats: JPEG, PNG, GIF, WebP (max 5MB)</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Tags */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-4">Tags</h3>
+
+              {/* Current tags display */}
+              {form.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {form.tags.map((tag, index) => (
+                    <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => handleTagRemove(tag)}
+                        className="ml-1 text-blue-600 hover:text-blue-800"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Tag input */}
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleTagAdd();
+                  }
+                }}
+                placeholder="Type tags separated by commas (e.g., education, community)"
+                className="w-full p-2 border border-gray-300 rounded-md text-sm"
+              />
+
+              <p className="text-xs text-gray-500 mt-2">
+                Type tags separated by commas. Press Enter to add them.
+              </p>
+
+              {/* Recommended checkbox */}
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="is_recommended"
+                    checked={form.is_recommended}
+                    onChange={(e) => setForm(prev => ({ ...prev, is_recommended: e.target.checked }))}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Recommended Article</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Excerpt */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-4">Excerpt</h3>
+              <textarea
+                name="excerpt"
+                value={form.excerpt}
+                onChange={handleInputChange}
+                placeholder="Write an excerpt (optional)"
+                rows={4}
+                className="w-full p-2 border border-gray-300 rounded-md resize-none"
+              />
+              <p className="text-xs text-gray-500 mt-2">
+                Excerpts are optional hand-crafted summaries of your content.
+              </p>
+            </div>
+
+            {/* Slug */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-4">Slug</h3>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  name="slug"
+                  value={form.slug}
+                  onChange={handleInputChange}
+                  placeholder="news-slug"
+                  className="flex-1 p-2 border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                The slug is the URL-friendly version of the title.
+              </p>
+            </div>
+
+            {/* Delete News - Only for edit mode */}
+            {mode === 'edit' && (
+              <div className="bg-white rounded-lg shadow-sm border border-red-200 p-6">
+                <p className="text-sm text-gray-600 mb-4">
+                  Once you delete this news article, there is no going back. Please be certain.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={loading}
+                  className="text-red-600 hover:text-red-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
+                >
+                  {loading ? 'Deleting...' : 'Delete this article'}
+                </button>
               </div>
             )}
           </div>
         </div>
-
-        {/* Status and Published Date */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="status"
-              value={form.status}
-              onChange={handleInputChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Published Date</label>
-            <input
-              type="datetime-local"
-              name="publishedAt"
-              value={form.publishedAt}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-        </div>
-
-        {/* Tags */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
-          <div className="flex gap-2 mb-2">
-            <input
-              type="text"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyPress={handleTagInputKeyPress}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Add a tag"
-            />
-            <button
-              type="button"
-              onClick={handleTagAdd}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Add
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {form.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
-              >
-                {tag}
-                <button
-                  type="button"
-                  onClick={() => handleTagRemove(tag)}
-                  className="ml-2 text-blue-600 hover:text-blue-800"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Recommended */}
-        <div>
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              name="is_recommended"
-              checked={form.is_recommended}
-              onChange={handleInputChange}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <span className="ml-2 text-sm font-medium text-gray-700">Recommended Article</span>
-          </label>
-        </div>
-
-        {/* Submit Buttons */}
-        <div className="flex gap-4">
-          <button
-            type="button"
-            onClick={(e) => handleSubmit(e, 'draft')}
-            disabled={loading || uploadingImage}
-            className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading && loadingType === 'draft' ? 'Saving...' : 'Save as Draft'}
-          </button>
-          <button
-            type="submit"
-            disabled={loading || uploadingImage}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading && loadingType === 'published' ? 'Publishing...' : uploadingImage ? 'Uploading...' : (mode === 'edit' ? 'Update Article' : 'Publish Article')}
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push('/admin/dashboard')}
-            className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md font-medium"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }
