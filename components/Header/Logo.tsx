@@ -6,7 +6,7 @@ interface LogoProps {
 }
 
 export default function Logo({ variant = 'light', size = 'large' }: LogoProps) {
-  const sizeClass = size === 'small' ? 'h-8' : 'h-12';
+  const sizeClass = size === 'small' ? 'h-8' : 'h-16';
   const filterClass = variant === 'dark' ? 'brightness-0 invert' : '';
 
   return (

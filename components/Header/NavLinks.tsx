@@ -19,7 +19,7 @@ export default function NavLinks({ variant = 'light', className = '' }: NavLinks
   const linkClasses = variant === 'dark' ? darkClasses : lightClasses;
 
   return (
-    <nav className={`flex space-x-8 ${className}`}>
+    <nav className={`flex space-x-8 py-2 ${className}`}>
       {links.map((link) => (
         <Link
           key={link.href}

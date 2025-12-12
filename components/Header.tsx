@@ -29,7 +29,6 @@ export default function Header() {
             <div className="grid grid-cols-3 items-center text-sm text-gray-600">
               <div className="flex items-center space-x-4">
                 <Logo size="large" />
-                <span>Come to the point, go to the root</span>
               </div>
               <div className="text-center font-medium">
                 {currentDate}

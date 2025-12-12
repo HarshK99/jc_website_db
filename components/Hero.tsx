@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <section className="bg-[url('/hero-bg.jpg')] bg-cover bg-center text-white relative min-h-screen flex items-center">
+    <section className="bg-[url('/hero-bg.jpg')] bg-cover bg-top text-white relative min-h-screen/80 flex items-center">
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-black/50"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="text-center">
