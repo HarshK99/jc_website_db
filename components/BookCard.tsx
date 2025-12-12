@@ -11,7 +11,7 @@ export default function BookCard({ book }: BookCardProps) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group max-w-sm mx-auto">
       <div className="relative aspect-[2/3] bg-gray-200">
         {!imageError ? (
           <Image
@@ -47,14 +47,14 @@ export default function BookCard({ book }: BookCardProps) {
           <div className="text-xs mb-4">
             {book.pages} pages
           </div>
-          <Link
+          {/* <Link
             href={book.buyLink}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition-colors"
           >
             Buy Now
-          </Link>
+          </Link> */}
         </div>
       </div>
 
