@@ -6,9 +6,11 @@ interface MobileMenuProps {
 }
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/books', label: 'Books' },
-  { href: '/blog', label: 'Blogs' },
+  { href: '/', label: 'HOME' },
+  { href: '/books', label: 'BOOKS' },
+  { href: '/blog', label: 'BLOGS' },
+  { href: '/news', label: 'NEWS ANALYSIS' },
+  { href: '/current-affairs', label: 'UPDATE CURRENT AFFAIRS' },
 ];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {

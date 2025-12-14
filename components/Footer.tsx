@@ -34,6 +34,11 @@ export default function Footer() {
                   News Analysis
                 </Link>
               </li>
+              <li>
+                <Link href="/current-affairs" className="text-gray-400 hover:text-white">
+                  Update Current Affairs
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

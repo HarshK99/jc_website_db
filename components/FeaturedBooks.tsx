@@ -69,7 +69,7 @@ export default function FeaturedBooks() {
             Discover our collection of carefully crafted stories for young readers.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center">
           {books.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
