@@ -1,4 +1,4 @@
--- Database schema for JnC Group website
+-- Database schema for JNC Group website
 -- Run this in phpMyAdmin to create the tables
 
 -- Books table
@@ -92,7 +92,7 @@ CREATE TABLE news_tags (
 
 -- Insert sample data
 INSERT INTO authors (name, bio) VALUES
-('JnC News Editorial', 'The core editorial voice guiding every title at J & C.');
+('JNC News Editorial', 'The core editorial voice guiding every title at J & C.');
 
 INSERT INTO books (title, slug, shortDescription, description, ageGroup, coverImage, buyLink, publishedYear, pages, isbn, author, category, price) VALUES
 ('Under the Banyan Tree', 'under-the-banyan-tree', 'A gentle, poetic journey beneath a wise old tree.', '<p>The banyan tree watches generations grow...</p>', '6–9 years', '/uploads/books/banyan.jpg', 'https://amazon.in/banyan', 2024, 42, '9788123456789', 'Dr. A.P.J. Abdul Kalam', 'Fiction', 299.00),

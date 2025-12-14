@@ -1,6 +1,6 @@
 export default function AboutUs() {
   const aboutData = {
-    brand: "JnC Group",
+    brand: "JNC Group",
     division: "Informatica",
     tagline: "Right information to a right person at the right time",
     quote: {
@@ -12,7 +12,7 @@ export default function AboutUs() {
     ],
       attribution: "Dr. Avul Pakir Jainulabdeen Abdul Kalam, Former President and Missile Man of India"
     },
-    description: "\"JnC Group\" is a brand name of the book publishing segment of J&C Newspaper Group, a leading publisher of general books. Its registered office stands in Guwahati. This group was set up in February 2008. The full name of our publishing house is Jobs and Careers Newspaper Group. It is generally shortened as J&C Books or jncnews.in or JNC Group. We deal in educational and career related books.",
+    description: "\"JNC Group\" is a brand name of the book publishing segment of J&C Newspaper Group, a leading publisher of general books. Its registered office stands in Guwahati. This group was set up in February 2008. The full name of our publishing house is Jobs and Careers Newspaper Group. It is generally shortened as J&C Books or jncnews.in or JNC Group. We deal in educational and career related books.",
     philosophy: "In fact, both good jobs and good people are not easy to find. While good people do always dream, perform and deliver the goods, good organisations demand for such a suitable working force. Without good people, a company can cruddle like a house of cards. It can't even grow without them. Because it is the vision of its people that defines and directs the rise or fall of corporate entities."
   };
 

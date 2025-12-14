@@ -13,7 +13,7 @@ export default function Logo({ variant = 'light', size = 'large' }: LogoProps) {
     <Link href="/" className="block">
       <img
         src="/logo_bg.png"
-        alt="JnC Group"
+        alt="JNC Group"
         className={`${sizeClass} ${filterClass} transition-opacity hover:opacity-80`}
       />
     </Link>
