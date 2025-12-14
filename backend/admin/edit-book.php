@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $author = $_POST['author'] ?? '';
     $category = $_POST['category'] ?? '';
     $price = $_POST['price'] ? (float)$_POST['price'] : null;
-    $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
+    $isFeatured = (isset($_POST['is_featured']) && $_POST['is_featured'] === 'true') ? 1 : 0;
 
     try {
         if ($id) {
