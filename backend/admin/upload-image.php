@@ -39,7 +39,17 @@ if (!isset($_FILES['image'])) {
 }
 
 $file = $_FILES['image'];
-$uploadDir = dirname(__DIR__, 2) . '/uploads/blog/';
+
+// Determine upload folder based on request parameter
+$folder = isset($_POST['folder']) ? $_POST['folder'] : 'blog';
+
+// Validate folder to prevent directory traversal
+$allowedFolders = ['blog', 'books', 'news'];
+if (!in_array($folder, $allowedFolders)) {
+    $folder = 'blog'; // Default to blog if invalid
+}
+
+$uploadDir = dirname(__DIR__, 2) . '/uploads/' . $folder . '/';
 
 // Create upload directory if it doesn't exist
 if (!is_dir($uploadDir)) {
@@ -76,11 +86,11 @@ if (move_uploaded_file($file['tmp_name'], $filepath)) {
     // Verify the file was actually created
     if (file_exists($filepath)) {
         // Return the full URL for the image
-        $imageUrl = $uploadBaseUrl . '/uploads/blog/' . $filename;
+        $imageUrl = $uploadBaseUrl . '/uploads/' . $folder . '/' . $filename;
         echo json_encode([
             'success' => true,
             'message' => 'Image uploaded successfully',
-            'path' => $imageUrl,
+            'imageUrl' => $imageUrl,
             'filename' => $filename
         ]);
     } else {

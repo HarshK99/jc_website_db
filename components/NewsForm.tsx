@@ -109,6 +109,7 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
     try {
       const formData = new FormData();
       formData.append('image', selectedImage);
+      formData.append('folder', 'news');
 
       const response = await fetch(ADMIN_ENDPOINTS.uploadImage, {
         method: 'POST',

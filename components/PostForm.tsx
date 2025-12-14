@@ -99,6 +99,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
         try {
           const formData = new FormData();
           formData.append('image', selectedImage);
+          formData.append('folder', 'blog');
 
           const response = await fetch(ADMIN_ENDPOINTS.uploadImage, {
             method: 'POST',
@@ -108,8 +109,8 @@ export default function PostForm({ mode, postId }: PostFormProps) {
 
           if (response.ok) {
             const data = await response.json();
-            coverImage = data.path;
-            setForm(prevForm => ({ ...prevForm, coverImage: data.path }));
+            coverImage = data.imageUrl;
+            setForm(prevForm => ({ ...prevForm, coverImage: data.imageUrl }));
             setSelectedImage(null); // Clear after successful upload
           } else {
             const errorData = await response.json().catch(() => ({}));
