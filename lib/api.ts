@@ -30,6 +30,24 @@ export async function fetchBooks(searchParams?: URLSearchParams): Promise<Book[]
   }
 }
 
+export async function fetchBook(slug: string): Promise<Book> {
+  try {
+    const url = new URL(`${API_BASE_URL}/api/books.php`);
+    url.searchParams.set('slug', slug);
+    console.log('Attempting to fetch book from:', url.toString());
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      throw new Error('Failed to fetch book');
+    }
+    const data = await response.json();
+    console.log('Fetched book from API:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching book:', error);
+    throw error;
+  }
+}
+
 export async function fetchPosts(limit?: number): Promise<Post[]> {
   try {
     const url = new URL(`${API_BASE_URL}/api/posts.php`);

@@ -35,7 +35,7 @@ export interface CurrentAffairs {
   coverImage: string;
   status: string;
   publishedAt: string;
-  is_featured: boolean;
+  is_featured: number;
   updatedAt: string;
   authorId: number;
   authorName?: string; // From API join
@@ -57,7 +57,7 @@ export interface Book {
   author: string;
   category: string;
   price: number;
-  is_featured: boolean;
+  is_featured: number;
 }
 
 export interface AdminUser {

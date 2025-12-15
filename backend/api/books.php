@@ -15,6 +15,35 @@ try {
     require_once '../includes/functions.php';
     require_once '../config/db.php';
 
+    // Check if requesting a single book by slug or ID
+    if (isset($_GET['slug'])) {
+        $slug = $_GET['slug'];
+        $stmt = $pdo->prepare("SELECT * FROM books WHERE slug = ?");
+        $stmt->execute([$slug]);
+        $book = $stmt->fetch();
+
+        if (!$book) {
+            errorResponse('Book not found', 404);
+        }
+
+        jsonResponse($book);
+        exit;
+    }
+
+    if (isset($_GET['id'])) {
+        $id = (int)$_GET['id'];
+        $stmt = $pdo->prepare("SELECT * FROM books WHERE id = ?");
+        $stmt->execute([$id]);
+        $book = $stmt->fetch();
+
+        if (!$book) {
+            errorResponse('Book not found', 404);
+        }
+
+        jsonResponse($book);
+        exit;
+    }
+
     // Build query with optional filters
     $whereConditions = [];
     $params = [];

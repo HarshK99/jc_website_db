@@ -26,7 +26,7 @@ interface BookFormData {
   author: string;
   category: string;
   price: string;
-  is_featured: boolean;
+  is_featured: number;
 }
 
 interface BookFormProps {
@@ -49,7 +49,7 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
     author: '',
     category: '',
     price: '',
-    is_featured: false,
+    is_featured: 0,
   });
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -87,7 +87,7 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
           author: bookData.author || '',
           category: bookData.category || '',
           price: bookData.price?.toString() || '',
-          is_featured: bookData.is_featured || false,
+          is_featured: bookData.is_featured || 0,
         });
         if (bookData.coverImage) {
           setImagePreview(bookData.coverImage);
@@ -198,7 +198,7 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
         author: form.author,
         category: form.category,
         price: form.price ? parseFloat(form.price).toString() : '',
-        is_featured: form.is_featured.toString(),
+        is_featured: form.is_featured ? 'true' : 'false',
       };
 
       const url = mode === 'edit' && bookId
@@ -394,8 +394,8 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
 
                 {/* Featured checkbox */}
                 <CheckboxField
-                  checked={form.is_featured}
-                  onChange={(checked) => setForm(prev => ({ ...prev, is_featured: checked }))}
+                  checked={form.is_featured === 1}
+                  onChange={(checked) => setForm(prev => ({ ...prev, is_featured: checked ? 1 : 0 }))}
                   label="Featured Book"
                   title="Settings"
                 />
