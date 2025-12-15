@@ -180,7 +180,7 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
       if (mode === 'add') {
         publishedAt = status === 'published'
           ? new Date().toISOString().slice(0, 16) // Current time for published items
-          : ''; // Empty for drafts
+          : form.publishedAt; // Keep the initialized date for drafts
       }
       // For edit mode, keep the existing publishedAt
 
