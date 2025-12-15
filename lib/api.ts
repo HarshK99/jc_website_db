@@ -1,4 +1,4 @@
-import { Book, Post } from './types';
+import { Book, Post, CurrentAffairs } from './types';
 
 // Determine API base URL based on environment
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -158,5 +158,45 @@ export async function fetchFeaturedBooks(): Promise<Book[]> {
     console.error('Error fetching featured books:', error);
     // Return empty array instead of sample data
     return [];
+  }
+}
+
+export async function fetchCurrentAffairs(limit?: number): Promise<CurrentAffairs[]> {
+  try {
+    const url = new URL(`${API_BASE_URL}/api/current-affairs.php`);
+    if (limit) {
+      url.searchParams.set('limit', limit.toString());
+    }
+    console.log('Attempting to fetch current affairs from:', url.toString());
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      throw new Error('Failed to fetch current affairs');
+    }
+    const data = await response.json();
+    console.log('Fetched current affairs from API:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching current affairs:', error);
+    // Return empty array instead of sample data
+    return [];
+  }
+}
+
+export async function fetchCurrentAffairsBySlug(slug: string): Promise<CurrentAffairs | null> {
+  try {
+    const url = new URL(`${API_BASE_URL}/api/current-affairs.php`);
+    url.searchParams.set('slug', slug);
+    console.log('Attempting to fetch current affairs from:', url.toString());
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      throw new Error('Failed to fetch current affairs');
+    }
+    const data = await response.json();
+    console.log('Fetched current affairs from API:', data);
+    return data.length > 0 ? data[0] : null;
+  } catch (error) {
+    console.error('Error fetching current affairs:', error);
+    // Return null instead of sample data
+    return null;
   }
 }

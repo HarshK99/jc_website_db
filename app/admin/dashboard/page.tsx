@@ -29,10 +29,20 @@ interface News {
   publishedAt: string;
 }
 
+interface CurrentAffairs {
+  id: number;
+  title: string;
+  slug: string;
+  status: string;
+  publishedAt: string;
+  is_featured: boolean;
+}
+
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [books, setBooks] = useState<Book[]>([]);
   const [news, setNews] = useState<News[]>([]);
+  const [currentAffairs, setCurrentAffairs] = useState<CurrentAffairs[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -78,11 +88,21 @@ export default function AdminDashboard() {
       } else {
         setNews([]);
       }
+
+      // Fetch current affairs
+      const currentAffairsResponse = await fetch(API_ENDPOINTS.currentAffairs);
+      const currentAffairsData = await currentAffairsResponse.json();
+      if (Array.isArray(currentAffairsData)) {
+        setCurrentAffairs(currentAffairsData);
+      } else {
+        setCurrentAffairs([]);
+      }
     } catch (err) {
       console.error('Failed to fetch data:', err);
       setPosts([]);
       setBooks([]);
       setNews([]);
+      setCurrentAffairs([]);
     } finally {
       setLoading(false);
     }
@@ -162,6 +182,52 @@ export default function AdminDashboard() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{newsItem.publishedAt}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link href={`/admin/news/edit?id=${newsItem.id}`} className="text-blue-600 hover:text-blue-900">Edit</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Current Affairs Section */}
+      <div className="mb-12">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Current Affairs</h2>
+          <Link href="/admin/current-affairs/add" className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">Add Current Affairs</Link>
+        </div>
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Featured</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Published</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {Array.isArray(currentAffairs) && currentAffairs.map((item) => (
+                <tr key={item.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.title}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      item.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {item.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      item.is_featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {item.is_featured ? 'Yes' : 'No'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.publishedAt}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Link href={`/admin/current-affairs/edit/${item.id}`} className="text-blue-600 hover:text-blue-900">Edit</Link>
                   </td>
                 </tr>
               ))}

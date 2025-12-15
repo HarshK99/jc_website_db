@@ -9,6 +9,7 @@ export const ADMIN_ENDPOINTS = {
   editPost: `${ADMIN_API_BASE}/admin/edit-post.php`,
   editNews: `${ADMIN_API_BASE}/admin/edit-news.php`,
   editBook: `${ADMIN_API_BASE}/admin/edit-book.php`,
+  editCurrentAffairs: `${ADMIN_API_BASE}/admin/edit-current-affairs.php`,
   uploadImage: `${ADMIN_API_BASE}/admin/upload-image.php`,
 } as const;
 
@@ -17,4 +18,5 @@ export const API_ENDPOINTS = {
   books: `${ADMIN_API_BASE}/api/books.php`,
   posts: `${ADMIN_API_BASE}/api/posts.php`,
   news: `${ADMIN_API_BASE}/api/news.php`,
+  currentAffairs: `${ADMIN_API_BASE}/api/current-affairs.php`,
 } as const;

@@ -26,7 +26,22 @@ export interface Post {
   authorAvatar?: string; // From API join
   tags?: string[];
 }
-
+export interface CurrentAffairs {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  coverImage: string;
+  status: string;
+  publishedAt: string;
+  is_featured: boolean;
+  updatedAt: string;
+  authorId: number;
+  authorName?: string; // From API join
+  authorAvatar?: string; // From API join
+  tags?: string[];
+}
 export interface Book {
   id: number;
   title: string;
