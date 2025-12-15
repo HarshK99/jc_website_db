@@ -68,7 +68,7 @@ try {
     $status = $_POST['status'];
     $publishedAt = $_POST['publishedAt'];
     $coverImage = $_POST['coverImage'] ?? '';
-    $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
+    $isFeatured = (isset($_POST['is_featured']) && $_POST['is_featured'] === 'true') ? 1 : 0;
 
     // Convert empty publishedAt to NULL
     $publishedAtValue = empty($publishedAt) ? null : $publishedAt;
