@@ -35,7 +35,7 @@ interface CurrentAffairs {
   slug: string;
   status: string;
   publishedAt: string;
-  is_featured: boolean;
+  is_featured: number;
 }
 
 export default function AdminDashboard() {
@@ -220,14 +220,14 @@ export default function AdminDashboard() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      item.is_featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                      item.is_featured > 0 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                     }`}>
-                      {item.is_featured ? 'Yes' : 'No'}
+                      {item.is_featured > 0 ? 'Yes' : 'No'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.publishedAt}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <Link href={`/admin/current-affairs/edit/${item.id}`} className="text-blue-600 hover:text-blue-900">Edit</Link>
+                    <Link href={`/admin/current-affairs/edit?id=${item.id}`} className="text-blue-600 hover:text-blue-900">Edit</Link>
                   </td>
                 </tr>
               ))}
