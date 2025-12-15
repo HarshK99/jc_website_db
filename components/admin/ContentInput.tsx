@@ -224,7 +224,7 @@ export default function ContentInput({
       </div>
 
       {/* Editor */}
-      <div className="border border-t-0 rounded-b-md bg-white">
+      <div className=" rounded-b-md bg-white">
         <EditorContent
           editor={editor}
           className="min-h-[240px] focus-within:outline-none"
