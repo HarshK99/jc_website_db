@@ -1,5 +1,11 @@
 import { Suspense } from 'react';
 import BookDetailClient from './BookDetailClient';
+import sampleData from '../../../data/sample-data-arc.json';
+
+export async function generateStaticParams() {
+  const books = (sampleData as any).books || [];
+  return books.map((b: any) => ({ slug: b.slug }));
+}
 
 export default function BookDetail() {
   return (

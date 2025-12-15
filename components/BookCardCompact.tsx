@@ -12,7 +12,7 @@ export default function BookCardCompact({ book }: BookCardCompactProps) {
 
   return (
     <Link
-      href={`/books/${book.slug}`}
+      href={`/books/post?slug=${book.slug}`}
       className="block group"
     >
       <article className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">

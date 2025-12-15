@@ -11,7 +11,7 @@ export default function BookCard({ book }: BookCardProps) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <Link href={`/books/${book.slug}`} className="block group">
+    <Link href={`/books/post?slug=${book.slug}`} className="block group">
       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group w-64">
         <div className="relative aspect-[2/3] bg-gray-200">
           {!imageError ? (
