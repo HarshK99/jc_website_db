@@ -3,6 +3,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ADMIN_ENDPOINTS } from '../lib/admin-config';
+import TitleInput from './admin/TitleInput';
+import ContentInput from './admin/ContentInput';
+import ExcerptInput from './admin/ExcerptInput';
+import SlugInput from './admin/SlugInput';
+import ImageUpload from './admin/ImageUpload';
+import TextInput from './admin/TextInput';
+import CheckboxField from './admin/CheckboxField';
+import DeleteSection from './admin/DeleteSection';
 
 interface BookFormData {
   title: string;
@@ -286,225 +294,121 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
           {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-6">
             {/* Title */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <input
-                type="text"
-                name="title"
-                value={form.title}
-                onChange={handleInputChange}
-                placeholder="Add book title"
-                className="w-full text-2xl font-bold border-none outline-none p-0 placeholder-gray-400"
-                required
-              />
-            </div>
+            <TitleInput
+              value={form.title}
+              onChange={(value) => {
+                setForm(prev => ({
+                  ...prev,
+                  title: value,
+                  slug: generateSlug(value)
+                }));
+              }}
+            />
 
             {/* Short Description */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <textarea
-                name="shortDescription"
-                value={form.shortDescription}
-                onChange={handleInputChange}
-                placeholder="Write a brief description for listings..."
-                rows={4}
-                className="w-full border-none outline-none p-0 resize-none"
-              />
-            </div>
+            <ExcerptInput
+              value={form.shortDescription}
+              onChange={(value) => setForm(prev => ({ ...prev, shortDescription: value }))}
+              placeholder="Write a brief description for listings..."
+              required={false}
+            />
 
             {/* Full Description */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <textarea
-                name="description"
-                value={form.description}
-                onChange={handleInputChange}
-                placeholder="Write the full book description here..."
-                rows={12}
-                className="w-full border-none outline-none p-0 resize-none"
-              />
-            </div>
+            <ContentInput
+              value={form.description}
+              onChange={(value) => setForm(prev => ({ ...prev, description: value }))}
+              placeholder="Write the full book description here..."
+              rows={12}
+            />
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Cover Image */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Cover Image</h3>
-
-              {imagePreview ? (
-                // Image preview with controls
-                <div className="space-y-4">
-                  <div className="relative">
-                    <img
-                      src={imagePreview.startsWith('data:') ? imagePreview : imagePreview}
-                      alt="Cover image preview"
-                      className="w-full h-48 object-cover rounded-lg border border-gray-200"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleRemoveImage}
-                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full text-sm"
-                      title="Remove image"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {form.coverImage && (
-                    <p className="text-xs text-green-600">✓ Image uploaded successfully</p>
-                  )}
-                </div>
-              ) : (
-                // Upload area
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <div className="text-gray-500 mb-2">
-                    <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-4">Select Cover Image</p>
-
-                  <div className="space-y-2">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageSelect}
-                      className="hidden"
-                      id="image-upload"
-                    />
-                    <label
-                      htmlFor="image-upload"
-                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
-                    >
-                      Choose Image
-                    </label>
-                    <p className="text-xs text-gray-500">Supported formats: JPEG, PNG, GIF, WebP (max 5MB)</p>
-                  </div>
-                </div>
-              )}
-            </div>
+            <ImageUpload
+              imagePreview={imagePreview}
+              onImageSelect={handleImageSelect}
+              onRemoveImage={handleRemoveImage}
+              folder="books"
+            />
 
             {/* Book Details */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">Book Details</h3>
 
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Author</label>
-                  <input
-                    type="text"
-                    name="author"
-                    value={form.author}
-                    onChange={handleInputChange}
-                    placeholder="Author name"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
+                <TextInput
+                  label="Author"
+                  value={form.author}
+                  onChange={(value) => setForm(prev => ({ ...prev, author: value }))}
+                  placeholder="Author name"
+                />
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                  <input
-                    type="text"
-                    name="category"
-                    value={form.category}
-                    onChange={handleInputChange}
-                    placeholder="Fiction, Adventure, etc."
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
+                <TextInput
+                  label="Category"
+                  value={form.category}
+                  onChange={(value) => setForm(prev => ({ ...prev, category: value }))}
+                  placeholder="Fiction, Adventure, etc."
+                />
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Age Group</label>
-                  <input
-                    type="text"
-                    name="ageGroup"
-                    value={form.ageGroup}
-                    onChange={handleInputChange}
-                    placeholder="e.g., 6–9 years"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
+                <TextInput
+                  label="Age Group"
+                  value={form.ageGroup}
+                  onChange={(value) => setForm(prev => ({ ...prev, ageGroup: value }))}
+                  placeholder="e.g., 6–9 years"
+                />
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Published Year</label>
-                    <input
-                      type="number"
-                      name="publishedYear"
-                      value={form.publishedYear}
-                      onChange={handleInputChange}
-                      min="1900"
-                      max="2030"
-                      placeholder="2024"
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Pages</label>
-                    <input
-                      type="number"
-                      name="pages"
-                      value={form.pages}
-                      onChange={handleInputChange}
-                      min="1"
-                      placeholder="32"
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
-                  <input
+                  <TextInput
+                    label="Published Year"
                     type="number"
-                    name="price"
-                    value={form.price}
-                    onChange={handleInputChange}
-                    min="0"
-                    step="0.01"
-                    placeholder="299.00"
-                    className="w-full p-2 border border-gray-300 rounded-md"
+                    value={form.publishedYear}
+                    onChange={(value) => setForm(prev => ({ ...prev, publishedYear: value }))}
+                    placeholder="2024"
+                  />
+                  <TextInput
+                    label="Pages"
+                    type="number"
+                    value={form.pages}
+                    onChange={(value) => setForm(prev => ({ ...prev, pages: value }))}
+                    placeholder="32"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">ISBN</label>
-                  <input
-                    type="text"
-                    name="isbn"
-                    value={form.isbn}
-                    onChange={handleInputChange}
-                    placeholder="9788123456789"
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
+                <TextInput
+                  label="Price (₹)"
+                  type="number"
+                  value={form.price}
+                  onChange={(value) => setForm(prev => ({ ...prev, price: value }))}
+                  placeholder="299.00"
+                />
+
+                <TextInput
+                  label="ISBN"
+                  value={form.isbn}
+                  onChange={(value) => setForm(prev => ({ ...prev, isbn: value }))}
+                  placeholder="9788123456789"
+                />
 
                 {/* Featured checkbox */}
-                <div className="pt-4 border-t border-gray-200">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="is_featured"
-                      checked={form.is_featured}
-                      onChange={handleInputChange}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">Featured Book</span>
-                  </label>
-                </div>
+                <CheckboxField
+                  checked={form.is_featured}
+                  onChange={(checked) => setForm(prev => ({ ...prev, is_featured: checked }))}
+                  label="Featured Book"
+                  title="Settings"
+                />
               </div>
             </div>
 
             {/* Buy Link */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">Purchase Link</h3>
-              <input
+              <TextInput
+                label="Purchase Link"
                 type="url"
-                name="buyLink"
                 value={form.buyLink}
-                onChange={handleInputChange}
+                onChange={(value) => setForm(prev => ({ ...prev, buyLink: value }))}
                 placeholder="https://..."
-                className="w-full p-2 border border-gray-300 rounded-md"
               />
               <p className="text-xs text-gray-500 mt-2">
                 Link to where readers can purchase this book.
@@ -512,40 +416,18 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
             </div>
 
             {/* Slug */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Slug</h3>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  name="slug"
-                  value={form.slug}
-                  onChange={handleInputChange}
-                  placeholder="book-slug"
-                  className="flex-1 p-2 border border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-2">
-                The slug is the URL-friendly version of the title.
-              </p>
-            </div>
+            <SlugInput
+              value={form.slug}
+              onChange={(value) => setForm(prev => ({ ...prev, slug: value }))}
+            />
 
             {/* Delete Book - Only for edit mode */}
-            {mode === 'edit' && (
-              <div className="bg-white rounded-lg shadow-sm border border-red-200 p-6">
-                <p className="text-sm text-gray-600 mb-4">
-                  Once you delete this book, there is no going back. Please be certain.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  disabled={loading}
-                  className="text-red-600 hover:text-red-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
-                >
-                  {loading ? 'Deleting...' : 'Delete this book'}
-                </button>
-              </div>
-            )}
+            <DeleteSection
+              isEditMode={mode === 'edit'}
+              onDelete={handleDelete}
+              loading={loading}
+              itemType="book"
+            />
           </div>
         </div>
       </div>

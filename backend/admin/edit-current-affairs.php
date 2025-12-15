@@ -108,6 +108,29 @@ try {
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
     exit;
+} elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    if (!$id) {
+        echo json_encode(['success' => false, 'message' => 'Current Affairs ID required']);
+        exit;
+    }
+
+    try {
+        // Delete tags first (due to foreign key constraint)
+        $pdo->prepare("DELETE FROM current_affairs_tags WHERE currentAffairsId = ?")->execute([$id]);
+
+        // Delete the current affairs item
+        $stmt = $pdo->prepare("DELETE FROM current_affairs WHERE id = ?");
+        $stmt->execute([$id]);
+
+        if ($stmt->rowCount() > 0) {
+            echo json_encode(['success' => true, 'message' => 'Current Affairs deleted successfully']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Current Affairs not found']);
+        }
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    }
+    exit;
 }
 
 } catch (Exception $e) {

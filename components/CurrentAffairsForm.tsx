@@ -4,6 +4,15 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ADMIN_ENDPOINTS } from '../lib/admin-config';
 import { CurrentAffairs } from '../lib/types';
+import {
+  TitleInput,
+  ContentInput,
+  SlugInput,
+  ImageUpload,
+  PublishDateInput,
+  CheckboxField,
+  DeleteSection
+} from './admin';
 
 interface CurrentAffairsFormProps {
   mode: 'add' | 'edit';
@@ -276,162 +285,61 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
           {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-6">
             {/* Title */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <input
-                type="text"
-                name="title"
-                value={form.title}
-                onChange={handleInputChange}
-                placeholder="Add title"
-                className="w-full text-2xl font-bold border-none outline-none p-0 placeholder-gray-400"
-                required
-              />
-            </div>
+            <TitleInput
+              value={form.title}
+              onChange={(value) => {
+                setForm(prev => ({
+                  ...prev,
+                  title: value,
+                  slug: generateSlug(value)
+                }));
+              }}
+            />
 
             {/* Content */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <textarea
-                name="content"
-                value={form.content}
-                onChange={handleInputChange}
-                placeholder="Write the full content here..."
-                rows={12}
-                className="w-full border-none outline-none p-0 resize-none"
-                required
-              />
-            </div>
+            <ContentInput
+              value={form.content}
+              onChange={(value) => setForm(prev => ({ ...prev, content: value }))}
+            />
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Cover Image - Hidden */}
-            {false && (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Cover Image</h3>
-
-              {imagePreview ? (
-                // Image preview with controls
-                <div className="space-y-4">
-                  <div className="relative">
-                    <img
-                      src={imagePreview.startsWith('data:') ? imagePreview : imagePreview}
-                      alt="Cover image preview"
-                      className="w-full h-48 object-cover rounded-lg border border-gray-200"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleRemoveImage}
-                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full text-sm"
-                      title="Remove image"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {form.coverImage && (
-                    <p className="text-xs text-green-600">✓ Image uploaded successfully</p>
-                  )}
-                </div>
-              ) : (
-                // Upload area
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <div className="text-gray-500 mb-2">
-                    <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-4">Select Cover Image</p>
-
-                  <div className="space-y-2">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageSelect}
-                      className="hidden"
-                      id="image-upload"
-                    />
-                    <label
-                      htmlFor="image-upload"
-                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
-                    >
-                      Choose Image
-                    </label>
-                    <p className="text-xs text-gray-500">Supported formats: JPEG, PNG, GIF, WebP (max 5MB)</p>
-                  </div>
-                </div>
-              )}
-            </div>
-            )}
+            <ImageUpload
+              imagePreview={imagePreview}
+              onImageSelect={handleImageSelect}
+              onRemoveImage={handleRemoveImage}
+              folder="current-affairs"
+              disabled={true}
+            />
 
             {/* Publish Date */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Publish Date & Time</h3>
-              <input
-                type="datetime-local"
-                name="publishedAt"
-                value={form.publishedAt}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
-              />
-              <p className="text-xs text-gray-500 mt-2">
-                Leave empty to publish immediately when clicking Publish.
-              </p>
-            </div>
+            <PublishDateInput
+              value={form.publishedAt}
+              onChange={(value) => setForm(prev => ({ ...prev, publishedAt: value }))}
+            />
 
             {/* Featured Checkbox */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Settings</h3>
-              <div className="space-y-4">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="is_featured"
-                    checked={form.is_featured}
-                    onChange={handleInputChange}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">Featured Item</span>
-                </label>
-              </div>
-            </div>
+            <CheckboxField
+              checked={form.is_featured}
+              onChange={(checked) => setForm(prev => ({ ...prev, is_featured: checked }))}
+              label="Featured Item"
+            />
 
             {/* Slug */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Slug</h3>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  name="slug"
-                  value={form.slug}
-                  onChange={handleInputChange}
-                  placeholder="current-affairs-slug"
-                  className="flex-1 p-2 border border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-2">
-                The slug is the URL-friendly version of the title.
-              </p>
-            </div>
+            <SlugInput
+              value={form.slug}
+              onChange={(value) => setForm(prev => ({ ...prev, slug: value }))}
+            />
 
             {/* Delete Current Affairs - Only for edit mode */}
-            {mode === 'edit' && (
-              <div className="bg-white rounded-lg shadow-sm border border-red-200 p-6">
-                <p className="text-sm text-gray-600 mb-4">
-                  Once you delete this current affairs item, there is no going back. Please be certain.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  disabled={loadingType !== null}
-                  className="text-red-600 hover:text-red-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
-                >
-                  {loadingType === 'draft' ? 'Deleting...' : 'Delete this item'}
-                </button>
-              </div>
-            )}
+            <DeleteSection
+              isEditMode={mode === 'edit'}
+              onDelete={handleDelete}
+              loading={loadingType !== null}
+              itemType="current affairs item"
+            />
           </div>
         </div>
       </div>

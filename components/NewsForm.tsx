@@ -1,6 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ADMIN_ENDPOINTS } from '../lib/admin-config';
+import {
+  TitleInput,
+  ExcerptInput,
+  ContentInput,
+  SlugInput,
+  ImageUpload,
+  PublishDateInput,
+  CheckboxField,
+  TagsInput,
+  StatusSelect,
+  DeleteSection
+} from './admin';
 
 interface NewsFormData {
   title: string;
@@ -285,229 +297,87 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
           {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-6">
             {/* Title */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <input
-                type="text"
-                name="title"
-                value={form.title}
-                onChange={handleInputChange}
-                placeholder="Add title"
-                className="w-full text-2xl font-bold border-none outline-none p-0 placeholder-gray-400"
-                required
-              />
-            </div>
+            <TitleInput
+              value={form.title}
+              onChange={(value) => {
+                setForm(prev => ({
+                  ...prev,
+                  title: value,
+                  slug: generateSlug(value)
+                }));
+              }}
+            />
+
+            {/* Excerpt */}
+            <ExcerptInput
+              value={form.excerpt}
+              onChange={(value) => setForm(prev => ({ ...prev, excerpt: value }))}
+              placeholder="Write an excerpt (optional)"
+              required={false}
+            />
 
             {/* Content */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <textarea
-                name="content"
-                value={form.content}
-                onChange={handleInputChange}
-                placeholder="Write your news article content here..."
-                rows={20}
-                className="w-full border-none outline-none p-0 resize-none"
-              />
-            </div>
+            <ContentInput
+              value={form.content}
+              onChange={(value) => setForm(prev => ({ ...prev, content: value }))}
+              placeholder="Write your news article content here..."
+              rows={20}
+            />
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Publish Panel - Show in both modes but with different content */}
             {mode === 'edit' && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold mb-4">Status</h3>
-
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-600">Current status:</span>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      form.status === 'published'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {form.status === 'published' ? 'Published' : 'Draft'}
-                    </span>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Publish Date</label>
-                    <input
-                      type="datetime-local"
-                      name="publishedAt"
-                      value={form.publishedAt}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                </div>
-              </div>
+              <StatusSelect
+                value={form.status}
+                onChange={(value) => setForm(prev => ({ ...prev, status: value }))}
+                label="Status"
+              />
             )}
+
+            {/* Publish Date */}
+            <PublishDateInput
+              value={form.publishedAt}
+              onChange={(value) => setForm(prev => ({ ...prev, publishedAt: value }))}
+            />
 
             {/* Featured Image */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Featured Image</h3>
-
-              {imagePreview ? (
-                // Image preview with controls
-                <div className="space-y-4">
-                  <div className="relative">
-                    <img
-                      src={imagePreview.startsWith('data:') ? imagePreview : imagePreview}
-                      alt="Featured image preview"
-                      className="w-full h-48 object-cover rounded-lg border border-gray-200"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleRemoveImage}
-                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full text-sm"
-                      title="Remove image"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {form.coverImage && (
-                    <p className="text-xs text-green-600">✓ Image uploaded successfully</p>
-                  )}
-                </div>
-              ) : (
-                // Upload area
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <div className="text-gray-500 mb-2">
-                    <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-4">Select Featured Image</p>
-
-                  <div className="space-y-2">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageSelect}
-                      className="hidden"
-                      id="image-upload"
-                    />
-                    <label
-                      htmlFor="image-upload"
-                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer"
-                    >
-                      Choose Image
-                    </label>
-                    <p className="text-xs text-gray-500">Supported formats: JPEG, PNG, GIF, WebP (max 5MB)</p>
-                  </div>
-                </div>
-              )}
-            </div>
+            <ImageUpload
+              imagePreview={imagePreview}
+              onImageSelect={handleImageSelect}
+              onRemoveImage={handleRemoveImage}
+              folder="news"
+            />
 
             {/* Tags */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Tags</h3>
+            <TagsInput
+              tags={form.tags}
+              onChange={(tags) => setForm(prev => ({ ...prev, tags }))}
+              placeholder="Type tags separated by commas"
+            />
 
-              {/* Current tags display */}
-              {form.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {form.tags.map((tag, index) => (
-                    <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                      {tag}
-                      <button
-                        type="button"
-                        onClick={() => handleTagRemove(tag)}
-                        className="ml-1 text-blue-600 hover:text-blue-800"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Tag input */}
-              <input
-                type="text"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleTagAdd();
-                  }
-                }}
-                placeholder="Type tags separated by commas (e.g., education, community)"
-                className="w-full p-2 border border-gray-300 rounded-md text-sm"
-              />
-
-              <p className="text-xs text-gray-500 mt-2">
-                Type tags separated by commas. Press Enter to add them.
-              </p>
-
-              {/* Recommended checkbox */}
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="is_recommended"
-                    checked={form.is_recommended}
-                    onChange={(e) => setForm(prev => ({ ...prev, is_recommended: e.target.checked }))}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">Recommended Article</span>
-                </label>
-              </div>
-            </div>
-
-            {/* Excerpt */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Excerpt</h3>
-              <textarea
-                name="excerpt"
-                value={form.excerpt}
-                onChange={handleInputChange}
-                placeholder="Write an excerpt (optional)"
-                rows={4}
-                className="w-full p-2 border border-gray-300 rounded-md resize-none"
-              />
-              <p className="text-xs text-gray-500 mt-2">
-                Excerpts are optional hand-crafted summaries of your content.
-              </p>
-            </div>
+            {/* Recommended checkbox */}
+            <CheckboxField
+              checked={form.is_recommended}
+              onChange={(checked) => setForm(prev => ({ ...prev, is_recommended: checked }))}
+              label="Recommended Article"
+              title="Settings"
+            />
 
             {/* Slug */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Slug</h3>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  name="slug"
-                  value={form.slug}
-                  onChange={handleInputChange}
-                  placeholder="news-slug"
-                  className="flex-1 p-2 border border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-2">
-                The slug is the URL-friendly version of the title.
-              </p>
-            </div>
+            <SlugInput
+              value={form.slug}
+              onChange={(value) => setForm(prev => ({ ...prev, slug: value }))}
+            />
 
             {/* Delete News - Only for edit mode */}
-            {mode === 'edit' && (
-              <div className="bg-white rounded-lg shadow-sm border border-red-200 p-6">
-                <p className="text-sm text-gray-600 mb-4">
-                  Once you delete this news article, there is no going back. Please be certain.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  disabled={loading}
-                  className="text-red-600 hover:text-red-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline"
-                >
-                  {loading ? 'Deleting...' : 'Delete this article'}
-                </button>
-              </div>
-            )}
+            <DeleteSection
+              isEditMode={mode === 'edit'}
+              onDelete={handleDelete}
+              loading={loading}
+              itemType="news article"
+            />
           </div>
         </div>
       </div>

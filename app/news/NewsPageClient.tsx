@@ -89,7 +89,7 @@ export default function NewsPageClient() {
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             {searchQuery
               ? `Found ${filteredNews.length} news article${filteredNews.length !== 1 ? 's' : ''} matching your search.`
-              : 'Stay updated with the latest news and announcements from J & C Group'
+              : 'Stay updated with the latest news and announcements from JNC Group'
             }
           </p>
         </div>
