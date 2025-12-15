@@ -10,7 +10,7 @@ const links = [
   { href: '/books', label: 'BOOKS' },
   { href: '/blog', label: 'BLOGS' },
   { href: '/news', label: 'NEWS ANALYSIS' },
-  { href: '/current-affairs', label: 'UPDATE CURRENT AFFAIRS' },
+  { href: '/current-affairs', label: 'CURRENT AFFAIRS' },
 ];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {

@@ -36,7 +36,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/current-affairs" className="text-gray-400 hover:text-white">
-                  Update Current Affairs
+                  Current Affairs
                 </Link>
               </li>
             </ul>
