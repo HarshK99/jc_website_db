@@ -64,7 +64,6 @@ try {
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $slug = $_POST['slug'];
-    $excerpt = $_POST['excerpt'];
     $content = $_POST['content'];
     $status = $_POST['status'];
     $publishedAt = $_POST['publishedAt'];
@@ -77,14 +76,14 @@ try {
     try {
         if ($id) {
             // Update
-            $stmt = $pdo->prepare("UPDATE current_affairs SET title=?, slug=?, excerpt=?, content=?, status=?, publishedAt=?, coverImage=?, is_featured=? WHERE id=?");
-            $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $isFeatured, $id]);
+            $stmt = $pdo->prepare("UPDATE current_affairs SET title=?, slug=?, content=?, status=?, publishedAt=?, coverImage=?, is_featured=? WHERE id=?");
+            $stmt->execute([$title, $slug, $content, $status, $publishedAtValue, $coverImage, $isFeatured, $id]);
             $currentAffairsId = $id;
             echo json_encode(['success' => true, 'message' => 'Current Affairs updated successfully', 'id' => $id]);
         } else {
             // Insert
-            $stmt = $pdo->prepare("INSERT INTO current_affairs (title, slug, excerpt, content, status, publishedAt, coverImage, authorId, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $slug, $excerpt, $content, $status, $publishedAtValue, $coverImage, $_SESSION['admin_id'], $isFeatured]);
+            $stmt = $pdo->prepare("INSERT INTO current_affairs (title, slug, content, status, publishedAt, coverImage, authorId, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $slug, $content, $status, $publishedAtValue, $coverImage, $_SESSION['admin_id'], $isFeatured]);
             $currentAffairsId = $pdo->lastInsertId();
             echo json_encode(['success' => true, 'message' => 'Current Affairs created successfully', 'id' => $currentAffairsId]);
         }

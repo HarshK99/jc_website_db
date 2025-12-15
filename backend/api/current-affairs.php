@@ -24,7 +24,7 @@ try {
     // Base query
     $query = "
         SELECT
-            ca.id, ca.title, ca.slug, ca.excerpt, ca.content, ca.coverImage, ca.status, ca.publishedAt, ca.is_featured, ca.updatedAt, ca.authorId,
+            ca.id, ca.title, ca.slug, ca.content, ca.coverImage, ca.status, ca.publishedAt, ca.is_featured, ca.updatedAt, ca.authorId,
             a.name as authorName,
             a.avatar as authorAvatar
         FROM current_affairs ca

@@ -82,7 +82,7 @@ export default function CurrentAffairsPage() {
                   </Link>
                 </h2>
                 <p className="text-gray-600 mb-3">
-                  {item.excerpt}
+                  {item.content}
                 </p>
                 <div className="flex items-center text-sm text-gray-500">
                   <span>{item.authorName}</span>

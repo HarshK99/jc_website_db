@@ -18,10 +18,9 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
   const [form, setForm] = useState({
     title: '',
     slug: '',
-    excerpt: '',
     content: '',
     status: 'draft',
-    publishedAt: '',
+    publishedAt: new Date().toISOString().slice(0, 16),
     coverImage: '',
     is_featured: false,
   });
@@ -42,7 +41,6 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
             setForm({
               title: data.title || '',
               slug: data.slug || '',
-              excerpt: data.excerpt || '',
               content: data.content || '',
               status: data.status || 'draft',
               publishedAt: data.publishedAt ? new Date(data.publishedAt).toISOString().slice(0, 16) : '',
@@ -180,7 +178,6 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
       const submitData: Record<string, string> = {
         title: form.title,
         slug: form.slug,
-        excerpt: form.excerpt,
         content: form.content,
         status: status,
         publishedAt: publishedAt,
@@ -291,19 +288,6 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
               />
             </div>
 
-            {/* Excerpt */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <textarea
-                name="excerpt"
-                value={form.excerpt}
-                onChange={handleInputChange}
-                placeholder="Write a brief excerpt..."
-                rows={4}
-                className="w-full border-none outline-none p-0 resize-none"
-                required
-              />
-            </div>
-
             {/* Content */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <textarea
@@ -320,7 +304,8 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Cover Image */}
+            {/* Cover Image - Hidden */}
+            {false && (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">Cover Image</h3>
 
@@ -378,6 +363,7 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
                 </div>
               )}
             </div>
+            )}
 
             {/* Publish Date */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
