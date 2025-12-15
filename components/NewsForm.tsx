@@ -38,7 +38,7 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
     excerpt: '',
     content: '',
     status: 'draft',
-    publishedAt: '',
+    publishedAt: new Date().toISOString().slice(0, 16),
     coverImage: '',
     is_recommended: false,
     tags: [],

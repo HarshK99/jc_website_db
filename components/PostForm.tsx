@@ -38,7 +38,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
     excerpt: '',
     content: '',
     status: 'draft',
-    publishedAt: '',
+    publishedAt: new Date().toISOString().slice(0, 16),
     coverImage: '',
     is_recommended: false,
     tags: [],
@@ -149,7 +149,7 @@ export default function PostForm({ mode, postId }: PostFormProps) {
         // For new posts, set publishedAt based on status
         publishedAt = status === 'published'
           ? new Date().toISOString().slice(0, 16) // Current time for published posts
-          : ''; // Empty for drafts
+          : form.publishedAt; // Keep the initialized date for drafts
       }
       // For edit mode, keep the existing publishedAt
 

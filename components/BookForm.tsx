@@ -311,6 +311,7 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
               onChange={(value) => setForm(prev => ({ ...prev, shortDescription: value }))}
               placeholder="Write a brief description for listings..."
               required={false}
+              label="Short Description"
             />
 
             {/* Full Description */}
@@ -318,6 +319,7 @@ export default function BookForm({ mode, bookId }: BookFormProps) {
               value={form.description}
               onChange={(value) => setForm(prev => ({ ...prev, description: value }))}
               placeholder="Write the full book description here..."
+              label="Full Description"
               rows={12}
             />
           </div>

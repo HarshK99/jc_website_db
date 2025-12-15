@@ -8,8 +8,13 @@ interface TitleInputProps {
 }
 
 export default function TitleInput({ value, onChange, placeholder = "Add title", required = true }: TitleInputProps) {
+  const hasContent = value.trim().length > 0;
+
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      {hasContent && (
+        <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+      )}
       <input
         type="text"
         value={value}
