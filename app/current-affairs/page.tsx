@@ -74,12 +74,12 @@ export default function CurrentAffairsPage() {
             {currentAffairs.map((item) => (
               <article key={item.id} className="border-b border-gray-100 pb-6 last:border-b-0 last:pb-0">
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                  <Link
+                  {item.title}
+                  {/* <Link
                     href={`/current-affairs/${item.slug}`}
                     className="hover:text-blue-600 transition-colors"
                   >
-                    {item.title}
-                  </Link>
+                  </Link> */}
                 </h2>
                 <p className="text-gray-600 mb-3">
                   {item.content}
