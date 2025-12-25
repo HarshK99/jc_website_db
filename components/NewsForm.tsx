@@ -258,7 +258,7 @@ export default function NewsForm({ mode, newsId }: NewsFormProps) {
     }
   };
 
-  const pageTitle = mode === 'edit' ? 'Edit News Analysis' : 'Add New News Analysis';
+  const pageTitle = mode === 'edit' ? 'Edit Articles' : 'Add New Articles';
   const publishButtonText = mode === 'edit'
     ? (form.status === 'published' ? 'Update' : 'Publish')
     : 'Publish';

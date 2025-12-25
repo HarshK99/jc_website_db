@@ -112,6 +112,26 @@ CREATE TABLE current_affairs_tags (
     FOREIGN KEY (currentAffairsId) REFERENCES current_affairs(id) ON DELETE CASCADE
 );
 
+-- Poems table
+CREATE TABLE poems (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    content LONGTEXT,
+    excerpt TEXT,
+    status ENUM('draft', 'published') DEFAULT 'draft',
+    publishedAt TIMESTAMP NULL,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Poem tags (many-to-many)
+CREATE TABLE poem_tags (
+    poemId INT,
+    tag VARCHAR(100),
+    PRIMARY KEY (poemId, tag),
+    FOREIGN KEY (poemId) REFERENCES poems(id) ON DELETE CASCADE
+);
+
 
 -- Insert sample data
 INSERT INTO authors (name, bio) VALUES
@@ -157,6 +177,15 @@ INSERT INTO current_affairs_tags (currentAffairsId, tag) VALUES
 (2, 'education'), (2, 'policy'), (2, 'government'),
 (3, 'diplomacy'), (3, 'international-relations'), (3, 'defense');
 
+-- Sample data for poems
+INSERT INTO poems (title, author, excerpt, content, status, publishedAt) VALUES
+('The Road Not Taken', 'Robert Frost', 'Two roads diverged in a yellow wood...', 'Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth;\n\nThen took the other, as just as fair,\nAnd having perhaps the better claim,\nBecause it was grassy and wanted wear;\nThough as for that the passing there\nHad worn them really about the same,\n\nAnd both that morning equally lay\nIn leaves no step had trodden black.\nOh, I kept the first for another day!\nYet knowing how way leads on to way,\nI doubted if I should ever come back.\n\nI shall be telling this with a sigh\nSomewhere ages and ages hence:\nTwo roads diverged in a wood, and I—\nI took the one less traveled by,\nAnd that has made all the difference.', 'published', '2025-12-15 09:00:00'),
+
+('If', 'Rudyard Kipling', 'If you can keep your head when all about you...', 'If you can keep your head when all about you\nAre losing theirs and blaming it on you,\nIf you can trust yourself when all men doubt you,\nBut make allowance for their doubting too;\nIf you can wait and not be tired by waiting,\nOr being lied about, don\'t deal in lies,\nOr being hated, don\'t give way to hating,\nAnd yet don\'t look too good, nor talk too wise:\n\nIf you can dream—and not make dreams your master;\nIf you can think—and not make thoughts your aim;\nIf you can meet with Triumph and Disaster\nAnd treat those two impostors just the same;\nIf you can bear to hear the truth you\'ve spoken\nTwisted by knaves to make a trap for fools,\nOr watch the things you gave your life to, broken,\nAnd stoop and build \'em up with worn-out tools:\n\nIf you can make one heap of all your winnings\nAnd risk it on one turn of pitch-and-toss,\nAnd lose, and start again at your beginnings\nAnd never breathe a word about your loss;\nIf you can force your heart and nerve and sinew\nTo serve your turn long after they are gone,\nAnd so hold on when there is nothing in you\nExcept the Will which says to them: \'Hold on!\'\n\nIf you can talk with crowds and keep your virtue,\nOr walk with Kings—nor lose the common touch,\nIf neither foes nor loving friends can hurt you,\nIf all men count with you, but none too much;\nIf you can fill the unforgiving minute\nWith sixty seconds\' worth of distance run,\nYours is the Earth and everything that\'s in it,\nAnd—which is more—you\'ll be a Man, my son!', 'published', '2025-12-14 10:00:00');
+
+INSERT INTO poem_tags (poemId, tag) VALUES
+(1, 'nature'), (1, 'choice'), (1, 'reflection'),
+(2, 'inspiration'), (2, 'life'), (2, 'wisdom');
 
 INSERT INTO admin_users (name, email, password, role) VALUES
 ('J & C Owner', 'admin@jc.com', '$2y$10$ENfVclRG7h7QobKrJTvpr.KjkRV9s7KjAYvaf03AbOB6e.s3ze5N2', 'owner'); -- Use password_hash() in PHP for real password

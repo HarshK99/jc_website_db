@@ -1,4 +1,4 @@
-import { Book, Post, CurrentAffairs } from './types';
+import { Book, Post, CurrentAffairs, Poem } from './types';
 
 // Determine API base URL based on environment
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -65,6 +65,23 @@ export async function fetchPosts(limit?: number): Promise<Post[]> {
   } catch (error) {
     console.error('Error fetching posts:', error);
     // Return empty array instead of sample data
+    return [];
+  }
+}
+
+export async function fetchPoems(): Promise<Poem[]> {
+  try {
+    const url = `${API_BASE_URL}/api/poems.php`;
+    console.log('Attempting to fetch poems from:', url);
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Failed to fetch poems');
+    }
+    const data = await response.json();
+    console.log('Fetched poems from API:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching poems:', error);
     return [];
   }
 }

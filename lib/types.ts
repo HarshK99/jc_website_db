@@ -60,6 +60,18 @@ export interface Book {
   is_featured: number;
 }
 
+export interface Poem {
+  id: number;
+  title: string;
+  author: string;
+  content: string;
+  excerpt: string;
+  tags?: string[];
+  publishedAt: string;
+  status: string;
+  updatedAt: string;
+}
+
 export interface AdminUser {
   id: number;
   name: string;
