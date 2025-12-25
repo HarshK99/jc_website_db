@@ -9,7 +9,7 @@ const links = [
   { href: '/', label: 'HOME' },
   { href: '/books', label: 'BOOKS' },
   { href: '/blog', label: 'BLOGS' },
-  { href: '/news', label: 'NEWS ANALYSIS' },
+  { href: '/news', label: 'ARTICLES' },
   { href: '/current-affairs', label: 'CURRENT AFFAIRS' },
 ];
 

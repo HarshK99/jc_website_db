@@ -155,8 +155,8 @@ export default function AdminDashboard() {
       {/* News Section */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">News Analysis</h2>
-          <Link href="/admin/news/add" className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Add New News Analysis</Link>
+          <h2 className="text-2xl font-semibold">Articles</h2>
+          <Link href="/admin/news/add" className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Add New Articles</Link>
         </div>
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="w-full">
