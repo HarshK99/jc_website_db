@@ -31,7 +31,7 @@ export default function CurrentAffairsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Current Affairs
+              Update Current Affairs
             </h1>
           </div>
           <div className="flex justify-center">
@@ -48,7 +48,7 @@ export default function CurrentAffairsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Current Affairs
+              Update Current Affairs
             </h1>
             <p className="text-red-600 mt-4">{error}</p>
           </div>
@@ -62,7 +62,7 @@ export default function CurrentAffairsPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Current Affairs
+            Update Current Affairs
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Stay informed with the latest developments and important news from around the world.

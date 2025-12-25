@@ -89,7 +89,7 @@ CREATE TABLE news_tags (
     FOREIGN KEY (newsId) REFERENCES news(id) ON DELETE CASCADE
 );
 
--- Current Affairs table
+-- Update Current Affairs table
 CREATE TABLE current_affairs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE current_affairs (
     FOREIGN KEY (authorId) REFERENCES authors(id)
 );
 
--- Current Affairs tags (many-to-many)
+-- Update Current Affairs tags (many-to-many)
 CREATE TABLE current_affairs_tags (
     currentAffairsId INT,
     tag VARCHAR(100),

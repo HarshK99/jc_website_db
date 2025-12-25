@@ -190,11 +190,11 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Current Affairs Section */}
+      {/* Update Current Affairs Section */}
       <div className="mb-12">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">Current Affairs</h2>
-          <Link href="/admin/current-affairs/add" className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">Add Current Affairs</Link>
+          <h2 className="text-2xl font-semibold">Update Current Affairs</h2>
+          <Link href="/admin/current-affairs/add" className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">Add Update Current Affairs</Link>
         </div>
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="w-full">

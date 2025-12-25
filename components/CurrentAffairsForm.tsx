@@ -245,7 +245,7 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
     }
   };
 
-  const pageTitle = mode === 'add' ? 'Add Current Affairs' : 'Edit Current Affairs';
+  const pageTitle = mode === 'add' ? 'Add Update Current Affairs' : 'Edit Update Current Affairs';
   const publishButtonText = loadingType === 'published'
     ? (mode === 'add' ? 'Publishing...' : 'Updating...')
     : (mode === 'add' ? 'Publish' : (form.status === 'published' ? 'Update' : 'Publish'));
@@ -333,7 +333,7 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
               onChange={(value) => setForm(prev => ({ ...prev, slug: value }))}
             />
 
-            {/* Delete Current Affairs - Only for edit mode */}
+            {/* Delete Update Current Affairs - Only for edit mode */}
             <DeleteSection
               isEditMode={mode === 'edit'}
               onDelete={handleDelete}

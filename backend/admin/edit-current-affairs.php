@@ -35,7 +35,7 @@ try {
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!$id) {
-        echo json_encode(['success' => false, 'message' => 'Current Affairs ID required']);
+        echo json_encode(['success' => false, 'message' => 'Update Current Affairs ID required']);
         exit;
     }
 
@@ -55,7 +55,7 @@ try {
             $currentAffairs['tags'] = $currentAffairs['tags'] ? explode(',', $currentAffairs['tags']) : [];
             echo json_encode($currentAffairs);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Current Affairs not found']);
+            echo json_encode(['success' => false, 'message' => 'Update Current Affairs not found']);
         }
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
@@ -79,13 +79,13 @@ try {
             $stmt = $pdo->prepare("UPDATE current_affairs SET title=?, slug=?, content=?, status=?, publishedAt=?, coverImage=?, is_featured=? WHERE id=?");
             $stmt->execute([$title, $slug, $content, $status, $publishedAtValue, $coverImage, $isFeatured, $id]);
             $currentAffairsId = $id;
-            echo json_encode(['success' => true, 'message' => 'Current Affairs updated successfully', 'id' => $id]);
+            echo json_encode(['success' => true, 'message' => 'Update Current Affairs updated successfully', 'id' => $id]);
         } else {
             // Insert
             $stmt = $pdo->prepare("INSERT INTO current_affairs (title, slug, content, status, publishedAt, coverImage, authorId, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$title, $slug, $content, $status, $publishedAtValue, $coverImage, $_SESSION['admin_id'], $isFeatured]);
             $currentAffairsId = $pdo->lastInsertId();
-            echo json_encode(['success' => true, 'message' => 'Current Affairs created successfully', 'id' => $currentAffairsId]);
+            echo json_encode(['success' => true, 'message' => 'Update Current Affairs created successfully', 'id' => $currentAffairsId]);
         }
 
         // Handle tags
@@ -110,7 +110,7 @@ try {
     exit;
 } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     if (!$id) {
-        echo json_encode(['success' => false, 'message' => 'Current Affairs ID required']);
+        echo json_encode(['success' => false, 'message' => 'Update Current Affairs ID required']);
         exit;
     }
 
@@ -123,9 +123,9 @@ try {
         $stmt->execute([$id]);
 
         if ($stmt->rowCount() > 0) {
-            echo json_encode(['success' => true, 'message' => 'Current Affairs deleted successfully']);
+            echo json_encode(['success' => true, 'message' => 'Update Current Affairs deleted successfully']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Current Affairs not found']);
+            echo json_encode(['success' => false, 'message' => 'Update Current Affairs not found']);
         }
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);

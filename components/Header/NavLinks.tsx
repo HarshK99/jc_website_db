@@ -6,11 +6,11 @@ interface NavLinksProps {
 }
 
 const links = [
-  { href: '/', label: 'HOME' },
-  { href: '/books', label: 'BOOKS' },
-  { href: '/blog', label: 'BLOGS' },
-  { href: '/news', label: 'ARTICLES' },
-  { href: '/current-affairs', label: 'CURRENT AFFAIRS' },
+  { href: '/', label: 'Home' },
+  { href: '/books', label: 'Books' },
+  { href: '/blog', label: 'Blogs' },
+  { href: '/news', label: 'Articles' },
+  { href: '/current-affairs', label: 'Update Current Affairs' },
 ];
 
 export default function NavLinks({ variant = 'light', className = '' }: NavLinksProps) {
