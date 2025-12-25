@@ -38,11 +38,20 @@ interface CurrentAffairs {
   is_featured: number;
 }
 
+interface Poem {
+  id: number;
+  title: string;
+  author: string;
+  status: string;
+  publishedAt: string;
+}
+
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [books, setBooks] = useState<Book[]>([]);
   const [news, setNews] = useState<News[]>([]);
   const [currentAffairs, setCurrentAffairs] = useState<CurrentAffairs[]>([]);
+  const [poems, setPoems] = useState<Poem[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -97,12 +106,22 @@ export default function AdminDashboard() {
       } else {
         setCurrentAffairs([]);
       }
+
+      // Fetch poems
+      const poemsResponse = await fetch(API_ENDPOINTS.poems);
+      const poemsData = await poemsResponse.json();
+      if (Array.isArray(poemsData)) {
+        setPoems(poemsData);
+      } else {
+        setPoems([]);
+      }
     } catch (err) {
       console.error('Failed to fetch data:', err);
       setPosts([]);
       setBooks([]);
       setNews([]);
       setCurrentAffairs([]);
+      setPoems([]);
     } finally {
       setLoading(false);
     }
@@ -228,6 +247,46 @@ export default function AdminDashboard() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.publishedAt}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link href={`/admin/current-affairs/edit?id=${item.id}`} className="text-blue-600 hover:text-blue-900">Edit</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Poems Section */}
+      <div className="mb-12">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Poems</h2>
+          <Link href="/admin/poems/add" className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">Add New Poem</Link>
+        </div>
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Published</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {Array.isArray(poems) && poems.map((poem) => (
+                <tr key={poem.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{poem.title}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{poem.author}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      poem.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {poem.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{poem.publishedAt}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Link href={`/admin/poems/edit?id=${poem.id}`} className="text-blue-600 hover:text-blue-900">Edit</Link>
                   </td>
                 </tr>
               ))}

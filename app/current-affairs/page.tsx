@@ -89,9 +89,10 @@ export default function CurrentAffairsPage() {
                   >
                   </Link> */}
                 </h2>
-                <p className="text-gray-600 mb-3">
-                  {item.content}
-                </p>
+                <div 
+                  className="text-gray-600 mb-3 prose prose-sm max-w-none"
+                  dangerouslySetInnerHTML={{ __html: item.content }}
+                />
                 <div className="flex items-center text-sm text-gray-500">
                   <span>{item.authorName}</span>
                   <span className="mx-2">•</span>

@@ -35,7 +35,7 @@ export default function AboutUs() {
           <div className="space-y-4 mb-6 max-w-4xl mx-auto text-center">
             {aboutData.quote.creativityLines.map((line, index) => (
               <p key={index} className="text-lg text-gray-700 italic leading-relaxed">
-                "{line}"
+                {line}
               </p>
             ))}
           </div>
