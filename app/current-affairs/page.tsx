@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { fetchCurrentAffairs } from '../../lib/api';
 import { CurrentAffairs } from '../../lib/types';
 
@@ -73,6 +72,15 @@ export default function CurrentAffairsPage() {
           <div className="space-y-6">
             {currentAffairs.map((item) => (
               <article key={item.id} className="border-b border-gray-100 pb-6 last:border-b-0 last:pb-0">
+                {item.coverImage && (
+                  <div className="mb-4">
+                    <img
+                      src={item.coverImage}
+                      alt={item.title}
+                      className="w-full h-48 object-cover rounded-lg"
+                    />
+                  </div>
+                )}
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   {item.title}
                   {/* <Link

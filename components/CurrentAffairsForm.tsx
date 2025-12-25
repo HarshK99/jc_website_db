@@ -305,13 +305,12 @@ export default function CurrentAffairsForm({ mode, currentAffairsId }: CurrentAf
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Cover Image - Hidden */}
+            {/* Cover Image */}
             <ImageUpload
               imagePreview={imagePreview}
               onImageSelect={handleImageSelect}
               onRemoveImage={handleRemoveImage}
               folder="current-affairs"
-              disabled={true}
             />
 
             {/* Publish Date */}
