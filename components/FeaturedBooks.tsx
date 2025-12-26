@@ -14,6 +14,7 @@ export default function FeaturedBooks() {
   useEffect(() => {
     const loadBooks = async () => {
       try {
+        setLoading(true);
         const data = await fetchFeaturedBooks();
         setBooks(data);
       } catch (err) {
@@ -43,7 +44,7 @@ export default function FeaturedBooks() {
     );
   }
 
-  if (error) {
+  if (error && books.length === 0) {
     return (
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,19 +70,29 @@ export default function FeaturedBooks() {
             Discover our collection of carefully crafted stories for young readers.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center">
-          {books.map((book) => (
-            <BookCard key={book.id} book={book} />
-          ))}
+
+        {/* Horizontal scrolling container */}
+        <div className="overflow-x-auto hide-scrollbar pb-4" style={{ scrollBehavior: 'smooth' }}>
+          <div className={`flex space-x-6 px-4 transition-all duration-300 ${books.length <= 3 ? 'justify-center' : 'w-max'}`}>
+            {books.map((book) => (
+              <div key={book.id} className="flex-shrink-0 w-64">
+                <BookCard book={book} />
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="text-center mt-8">
-          <Link
-            href="/books"
-            className="inline-block bg-primary text-white px-6 py-3 rounded-md hover:bg-primary-dark transition-colors"
-          >
-            View All Books
-          </Link>
-        </div>
+
+        {/* View All Books button - only show if there are books */}
+        {books.length > 0 && (
+          <div className="text-center mt-8">
+            <Link
+              href="/books"
+              className="inline-block bg-primary text-white px-6 py-3 rounded-md hover:bg-primary-dark transition-colors"
+            >
+              View All Books
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

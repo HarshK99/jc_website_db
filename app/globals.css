@@ -32,6 +32,16 @@ body {
   color: var(--foreground);
   font-family: var(--font-crimson-text), serif;
 }
+
+/* Hide scrollbars for horizontal scrolling containers */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
 .compact-header {
   transition: all 300ms ease;
 }
