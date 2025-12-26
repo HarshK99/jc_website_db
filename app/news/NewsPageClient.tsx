@@ -55,7 +55,7 @@ export default function NewsPageClient() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Latest News
+              Latest Articles
             </h1>
           </div>
           <div className="flex justify-center">
@@ -84,7 +84,7 @@ export default function NewsPageClient() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            {searchQuery ? `Search Results for "${searchQuery}"` : 'Latest News'}
+            {searchQuery ? `Search Results for "${searchQuery}"` : 'Latest Articles'}
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             {searchQuery

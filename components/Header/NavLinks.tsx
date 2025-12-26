@@ -7,7 +7,7 @@ interface NavLinksProps {
 }
 
 export default function NavLinks({ variant = 'light', className = '' }: NavLinksProps) {
-  const baseClasses = 'font-bold transition-colors duration-200';
+  const baseClasses = 'font-navbar transition-colors duration-200';
   const lightClasses = 'text-gray-700 hover:text-primary-dark';
   const darkClasses = 'text-white hover:text-primary-dark';
 

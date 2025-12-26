@@ -15,7 +15,7 @@ export default function LatestNews({ news, maxNews = 5 }: LatestNewsProps) {
   return (
     <section className="bg-white rounded-lg shadow-md p-6">
       <h3 className="text-xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-2">
-        Latest News
+        Latest Articles
       </h3>
       <div className="space-y-4">
         {displayNews.map((newsItem) => (

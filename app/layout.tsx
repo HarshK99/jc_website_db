@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Crimson_Text } from "next/font/google";
+import { Montserrat, Crimson_Text, Inter } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "../components/LayoutWrapper";
 
@@ -14,6 +14,13 @@ const crimsonText = Crimson_Text({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "600"],
+});
+
+const inter = Inter({
+  variable: "--font-navbar",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.variable} ${crimsonText.variable} antialiased`}
+        className={`${montserrat.variable} ${crimsonText.variable} ${inter.variable} antialiased`}
       >
         <LayoutWrapper>{children}</LayoutWrapper>
       </body>

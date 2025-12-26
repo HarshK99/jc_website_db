@@ -18,6 +18,7 @@
   --font-sans: var(--font-montserrat);
   --font-serif: var(--font-crimson-text);
   --font-mono: var(--font-geist-mono);
+  --font-navbar: 'Inter', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,6 +41,11 @@ body {
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
+}
+
+/* Navbar font */
+.font-navbar {
+  font-family: var(--font-navbar);
 }
 
 .compact-header {

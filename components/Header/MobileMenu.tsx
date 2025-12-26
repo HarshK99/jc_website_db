@@ -16,7 +16,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           <Link
             key={link.href}
             href={link.href}
-            className="block text-gray-700 hover:text-gray-900 py-2"
+            className="block font-navbar font-medium text-gray-700 hover:text-gray-900 py-2"
             onClick={onClose}
           >
             {link.label}
