@@ -1,18 +1,10 @@
 import Link from 'next/link';
+import { navLinks } from '../../lib/nav-links';
 
 interface NavLinksProps {
   variant?: 'light' | 'dark';
   className?: string;
 }
-
-const links = [
-  { href: '/', label: 'Home' },
-  { href: '/books', label: 'Books' },
-  { href: '/blog', label: 'Blogs' },
-  { href: '/poems', label: 'Poems' },
-  { href: '/news', label: 'Articles' },
-  { href: '/current-affairs', label: 'Update Current Affairs' },
-];
 
 export default function NavLinks({ variant = 'light', className = '' }: NavLinksProps) {
   const baseClasses = 'font-bold transition-colors duration-200';
@@ -23,7 +15,7 @@ export default function NavLinks({ variant = 'light', className = '' }: NavLinks
 
   return (
     <nav className={`flex space-x-8 py-2 ${className}`}>
-      {links.map((link) => (
+      {navLinks.map((link) => (
         <Link
           key={link.href}
           href={link.href}

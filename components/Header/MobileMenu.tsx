@@ -1,17 +1,10 @@
 import Link from 'next/link';
+import { navLinks } from '../../lib/nav-links';
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const links = [
-  { href: '/', label: 'Home' },
-  { href: '/books', label: 'Books' },
-  { href: '/blog', label: 'Blogs' },
-  { href: '/news', label: 'Articles' },
-  { href: '/current-affairs', label: 'Update Current Affairs' },
-];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   if (!isOpen) return null;
@@ -19,7 +12,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   return (
     <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t z-50">
       <div className="px-4 py-6 space-y-4">
-        {links.map((link) => (
+        {navLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}

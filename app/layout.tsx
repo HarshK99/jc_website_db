@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "JNC Group - News Channel and Books Publisher",
   description: "Come to the point. Go to the root. Publishing books that inspire young minds.",
   icons: {
-    icon: "/logo.jpeg",
+    icon: "/logo_bg.png",
   },
 };
 
